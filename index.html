@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdeaVolt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --bg:#FAFAF9;--surface:#FFFFFF;--hover:#F4F4F2;
+  --border:#E5E5E3;--border-l:#EEEEEC;
+  --t1:#1A1A1A;--t2:#6B6B6B;--t3:#9A9A9A;
+  --accent:#059669;--accent-s:rgba(5,150,105,0.08);--accent-h:#047857;
+  --red:#DC2626;--red-s:rgba(220,38,38,0.06);--r:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased;}
+::selection{background:var(--accent);color:#fff;}
+nav{position:sticky;top:0;z-index:10;padding:14px 0;background:rgba(250,250,249,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-l);}
+.nav-inner{max-width:680px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-size:1.05rem;font-weight:800;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px;color:var(--t1);}
+.logo-mark{width:24px;height:24px;background:var(--accent);border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.6rem;color:#fff;}
+.nav-tabs{display:flex;gap:2px;}
+.nav-tab{padding:6px 14px;border:none;background:none;font-family:'Manrope',sans-serif;font-size:0.78rem;font-weight:600;color:var(--t3);cursor:pointer;border-radius:6px;transition:all 0.12s;}
+.nav-tab:hover{color:var(--t2);background:var(--hover);}
+.nav-tab.active{color:var(--accent);background:var(--accent-s);}
+.container{max-width:680px;margin:0 auto;padding:32px 24px 80px;}
+.page{display:none;animation:fadeIn 0.25s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.page-title{font-size:1.3rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px;}
+.page-desc{font-size:0.85rem;color:var(--t2);font-weight:400;margin-bottom:28px;}
+
+.idea-input{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:32px;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:border-color 0.2s,box-shadow 0.2s;}
+.idea-input:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-s);}
+.idea-input input{width:100%;background:none;border:none;outline:none;font-family:'Manrope',sans-serif;font-size:1rem;font-weight:600;color:var(--t1);margin-bottom:12px;}
+.idea-input input::placeholder{color:var(--t3);font-weight:400;}
+.idea-input textarea{width:100%;background:none;border:none;outline:none;resize:vertical;font-family:'Manrope',sans-serif;font-size:0.85rem;font-weight:400;color:var(--t2);line-height:1.55;min-height:80px;}
+.idea-input textarea::placeholder{color:var(--t3);}
+.idea-input-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid var(--border-l);flex-wrap:wrap;gap:10px;}
+.idea-tags{display:flex;gap:5px;flex-wrap:wrap;}
+.tag-btn{padding:4px 10px;border-radius:4px;border:1px solid var(--border);background:none;font-family:'Manrope',sans-serif;font-size:0.68rem;font-weight:600;color:var(--t3);cursor:pointer;transition:all 0.12s;}
+.tag-btn:hover,.tag-btn.picked{border-color:var(--accent);color:var(--accent);background:var(--accent-s);}
+.save-btn{padding:8px 20px;border:none;border-radius:6px;background:var(--accent);color:#fff;font-family:'Manrope',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;transition:all 0.12s;}
+.save-btn:hover{background:var(--accent-h);}
+.save-btn:active{transform:scale(0.97);}
+
+.ideas-count{font-size:0.72rem;font-weight:600;color:var(--t3);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.idea-item{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);padding:18px 20px;margin-bottom:10px;transition:border-color 0.15s,box-shadow 0.15s;position:relative;box-shadow:0 1px 2px rgba(0,0,0,0.02);}
+.idea-item:hover{border-color:var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+.idea-item h3{font-size:0.9rem;font-weight:700;margin-bottom:6px;padding-right:28px;line-height:1.35;color:var(--t1);}
+.idea-item p{font-size:0.82rem;color:var(--t2);line-height:1.55;font-weight:400;white-space:pre-wrap;}
+.idea-item-meta{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.idea-tag{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:2px 7px;border-radius:3px;background:var(--accent-s);color:var(--accent);}
+.idea-date{font-size:0.65rem;color:var(--t3);}
+.idea-del{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--t3);cursor:pointer;font-size:0.75rem;width:24px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all 0.12s;}
+.idea-item:hover .idea-del{opacity:1;}
+.idea-del:hover{background:var(--red-s);color:var(--red);}
+.empty{text-align:center;padding:48px 20px;color:var(--t3);font-size:0.88rem;}
+.loading{text-align:center;padding:48px 20px;color:var(--t3);font-size:0.85rem;}
+
+.product-card{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);padding:20px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,0.02);transition:border-color 0.15s;}
+.product-card:hover{border-color:var(--border);}
+.product-card h3{font-size:0.95rem;font-weight:700;margin-bottom:5px;}
+.product-card p{font-size:0.82rem;color:var(--t2);line-height:1.55;margin-bottom:10px;}
+.product-status{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:2px 8px;border-radius:3px;}
+.ps-active{background:var(--accent-s);color:var(--accent);}
+.ps-building{background:rgba(245,158,11,0.08);color:#b45309;}
+
+.about-block{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);padding:24px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,0.02);}
+.about-block h3{font-size:0.95rem;font-weight:700;margin-bottom:10px;}
+.about-block p{font-size:0.84rem;color:var(--t2);line-height:1.65;margin-bottom:8px;}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--t1);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:0.8rem;font-weight:500;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,0.12);opacity:0;transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+</style>
+</head>
+<body>
+<nav><div class="nav-inner">
+  <div class="logo"><span class="logo-mark">IV</span>IdeaVolt</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="go('ideas')">Ideas</button>
+    <button class="nav-tab" onclick="go('products')">Products</button>
+    <button class="nav-tab" onclick="go('about')">About</button>
+  </div>
+</div></nav>
+
+<div class="container">
+  <div class="page active" id="pg-ideas">
+    <h1 class="page-title">Ideas</h1>
+    <p class="page-desc">Drop it before you forget it.</p>
+    <div class="idea-input">
+      <input type="text" id="iTitle" placeholder="What's the idea?"/>
+      <textarea id="iBody" placeholder="Describe it... why does it matter? what's the impact?"></textarea>
+      <div class="idea-input-footer">
+        <div class="idea-tags">
+          <button class="tag-btn picked" data-t="general" onclick="pickTag(this)">General</button>
+          <button class="tag-btn" data-t="feature" onclick="pickTag(this)">Feature</button>
+          <button class="tag-btn" data-t="design" onclick="pickTag(this)">Design</button>
+          <button class="tag-btn" data-t="fix" onclick="pickTag(this)">Fix</button>
+          <button class="tag-btn" data-t="growth" onclick="pickTag(this)">Growth</button>
+        </div>
+        <button class="save-btn" onclick="saveIdea()">Save</button>
+      </div>
+    </div>
+    <div class="ideas-count" id="ideasCount"></div>
+    <div id="ideasList"><div class="loading">Loading ideas...</div></div>
+  </div>
+
+  <div class="page" id="pg-products">
+    <h1 class="page-title">Products</h1>
+    <p class="page-desc">What's in motion.</p>
+    <div id="productsList"></div>
+  </div>
+
+  <div class="page" id="pg-about">
+    <h1 class="page-title">About</h1>
+    <p class="page-desc">Why this exists.</p>
+    <div class="about-block">
+      <h3>IdeaVolt</h3>
+      <p>Ideas hit at random — during a code review, on a walk, at 2 AM. Most disappear before they're written down.</p>
+      <p>This is a simple place to drop them. Open it, type it, save it. Come back later and they're still here.</p>
+      <p>No project boards, no workflows, no complexity. Just a place for ideas to land.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══ SUPABASE — injected at build time by Netlify ═══
+const SUPABASE_URL = '__SUPABASE_URL__';
+const SUPABASE_KEY = '__SUPABASE_KEY__';
+const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentTag = 'general';
+
+async function loadIdeas() {
+  try {
+    const { data, error } = await sbClient.from('ideas').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  } catch (e) { console.error('Load error:', e); return []; }
+}
+
+async function saveIdea() {
+  const title = document.getElementById('iTitle').value.trim();
+  const body = document.getElementById('iBody').value.trim();
+  if (!title) { notify('Give your idea a title'); return; }
+  try {
+    const { error } = await sbClient.from('ideas').insert({ title, body, tag: currentTag });
+    if (error) throw error;
+    document.getElementById('iTitle').value = '';
+    document.getElementById('iBody').value = '';
+    await render();
+    notify('Saved ✓');
+  } catch (e) { console.error('Save error:', e); notify('Failed to save'); }
+}
+
+async function delIdea(id) {
+  if (!confirm('Delete this idea?')) return;
+  try {
+    const { error } = await sbClient.from('ideas').delete().eq('id', id);
+    if (error) throw error;
+    await render();
+    notify('Deleted');
+  } catch (e) { console.error('Delete error:', e); notify('Failed to delete'); }
+}
+
+function go(pg) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('active'));
+  document.getElementById('pg-' + pg).classList.add('active');
+  document.querySelectorAll('.nav-tab')[['ideas', 'products', 'about'].indexOf(pg)].classList.add('active');
+}
+
+function pickTag(btn) {
+  document.querySelectorAll('.tag-btn').forEach(x => x.classList.remove('picked'));
+  btn.classList.add('picked');
+  currentTag = btn.dataset.t;
+}
+
+async function render() {
+  const ideas = await loadIdeas();
+  document.getElementById('ideasCount').textContent = ideas.length + ' idea' + (ideas.length !== 1 ? 's' : '');
+  if (!ideas.length) { document.getElementById('ideasList').innerHTML = '<div class="empty">No ideas yet. Type one above and hit Save.</div>'; return; }
+  document.getElementById('ideasList').innerHTML = ideas.map(i => `
+    <div class="idea-item">
+      <button class="idea-del" onclick="delIdea(${i.id})" title="Delete">✕</button>
+      <h3>${esc(i.title)}</h3>
+      ${i.body ? `<p>${esc(i.body)}</p>` : ''}
+      <div class="idea-item-meta">
+        <span class="idea-tag">${esc(i.tag || 'general')}</span>
+        <span class="idea-date">${fmtD(i.created_at)}</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderProducts() {
+  document.getElementById('productsList').innerHTML = [
+    { name: 'Main Website', desc: 'Primary web presence — currently being built from scratch.', status: 'Building', cls: 'ps-building' },
+    { name: 'IdeaVolt', desc: 'This site. A simple place to capture ideas.', status: 'Active', cls: 'ps-active' }
+  ].map(p => `<div class="product-card"><h3>${p.name}</h3><p>${p.desc}</p><span class="product-status ${p.cls}">${p.status}</span></div>`).join('');
+}
+
+function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function fmtD(d) { return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+function notify(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
+
+render();
+renderProducts();
+document.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { if (document.querySelector('.page.active').id === 'pg-ideas') saveIdea(); } });
+</script>
+</body>
+</html>
