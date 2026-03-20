@@ -1,99 +1,239 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IdeaVolt</title>
+<title>IdeaVolt — Capture Ideas Before They Disappear</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --bg:#FAFAF9;--surface:#FFFFFF;--hover:#F4F4F2;
-  --border:#E5E5E3;--border-l:#EEEEEC;
-  --t1:#1A1A1A;--t2:#6B6B6B;--t3:#9A9A9A;
-  --accent:#059669;--accent-s:rgba(5,150,105,0.08);--accent-h:#047857;
-  --red:#DC2626;--red-s:rgba(220,38,38,0.06);--r:8px;
+/* ── Design Tokens ── */
+:root {
+  --bg: #FAFAF9;
+  --surface: #FFFFFF;
+  --hover: #F4F4F2;
+  --border: #E5E5E3;
+  --border-l: #EEEEEC;
+  --input-border: #9CA3AF;
+  --t1: #1A1A1A;
+  --t2: #6B6B6B;
+  --t3: #9A9A9A;
+  --accent: #059669;
+  --accent-s: rgba(5,150,105,0.08);
+  --accent-h: #047857;
+  --accent-light: rgba(5,150,105,0.15);
+  --red: #DC2626;
+  --red-s: rgba(220,38,38,0.06);
+  --r: 12px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased;}
-::selection{background:var(--accent);color:#fff;}
-nav{position:sticky;top:0;z-index:10;padding:14px 0;background:rgba(250,250,249,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-l);}
-.nav-inner{max-width:680px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-size:1.05rem;font-weight:800;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px;color:var(--t1);}
-.logo-mark{width:24px;height:24px;background:var(--accent);border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.6rem;color:#fff;}
-.nav-tabs{display:flex;gap:2px;}
-.nav-tab{padding:6px 14px;border:none;background:none;font-family:'Manrope',sans-serif;font-size:0.78rem;font-weight:600;color:var(--t3);cursor:pointer;border-radius:6px;transition:all 0.12s;}
-.nav-tab:hover{color:var(--t2);background:var(--hover);}
-.nav-tab.active{color:var(--accent);background:var(--accent-s);}
-.container{max-width:680px;margin:0 auto;padding:32px 24px 80px;}
-.page{display:none;animation:fadeIn 0.25s ease;}
-.page.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
-.page-title{font-size:1.3rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px;}
-.page-desc{font-size:0.85rem;color:var(--t2);font-weight:400;margin-bottom:28px;}
 
-.idea-input{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:32px;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:border-color 0.2s,box-shadow 0.2s;}
-.idea-input:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-s);}
-.idea-input input{width:100%;background:none;border:none;outline:none;font-family:'Manrope',sans-serif;font-size:1rem;font-weight:600;color:var(--t1);margin-bottom:12px;}
-.idea-input input::placeholder{color:var(--t3);font-weight:400;}
-.idea-input textarea{width:100%;background:none;border:none;outline:none;resize:vertical;font-family:'Manrope',sans-serif;font-size:0.85rem;font-weight:400;color:var(--t2);line-height:1.55;min-height:80px;}
-.idea-input textarea::placeholder{color:var(--t3);}
-.idea-input-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid var(--border-l);flex-wrap:wrap;gap:10px;}
-.idea-tags{display:flex;gap:5px;flex-wrap:wrap;}
-.tag-btn{padding:4px 10px;border-radius:4px;border:1px solid var(--border);background:none;font-family:'Manrope',sans-serif;font-size:0.68rem;font-weight:600;color:var(--t3);cursor:pointer;transition:all 0.12s;}
-.tag-btn:hover,.tag-btn.picked{border-color:var(--accent);color:var(--accent);background:var(--accent-s);}
-.save-btn{padding:8px 20px;border:none;border-radius:6px;background:var(--accent);color:#fff;font-family:'Manrope',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;transition:all 0.12s;}
-.save-btn:hover{background:var(--accent-h);}
-.save-btn:active{transform:scale(0.97);}
+/* ── Reset ── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--t1); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+input, button, textarea { font-family: inherit; }
+::selection { background: var(--accent); color: #fff; }
 
-.ideas-count{font-size:0.72rem;font-weight:600;color:var(--t3);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
-.idea-item{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);padding:18px 20px;margin-bottom:10px;transition:border-color 0.15s,box-shadow 0.15s;position:relative;box-shadow:0 1px 2px rgba(0,0,0,0.02);}
-.idea-item:hover{border-color:var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.04);}
-.idea-item h3{font-size:0.9rem;font-weight:700;margin-bottom:6px;padding-right:28px;line-height:1.35;color:var(--t1);}
-.idea-item p{font-size:0.82rem;color:var(--t2);line-height:1.55;font-weight:400;white-space:pre-wrap;}
-.idea-item-meta{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;}
-.idea-tag{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:2px 7px;border-radius:3px;background:var(--accent-s);color:var(--accent);}
-.idea-date{font-size:0.65rem;color:var(--t3);}
-.idea-del{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--t3);cursor:pointer;font-size:0.75rem;width:24px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all 0.12s;}
-.idea-item:hover .idea-del{opacity:1;}
-.idea-del:hover{background:var(--red-s);color:var(--red);}
-.empty{text-align:center;padding:48px 20px;color:var(--t3);font-size:0.88rem;}
-.loading{text-align:center;padding:48px 20px;color:var(--t3);font-size:0.85rem;}
+/* ── Navigation ── */
+nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(250,250,249,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-l); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; }
+.logo { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; color: var(--t1); cursor: pointer; }
+.logo-mark { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.65rem; color: #fff; }
+.nav-tabs { display: flex; gap: 2px; }
+.nav-tab { padding: 8px 16px; border: none; background: none; font-size: 0.85rem; font-weight: 600; color: var(--t3); cursor: pointer; border-radius: 8px; transition: all 0.12s; }
+.nav-tab:hover { color: var(--t2); background: var(--hover); }
+.nav-tab.active { color: var(--accent); background: var(--accent-s); }
 
-.product-card{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);padding:20px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,0.02);transition:border-color 0.15s;}
-.product-card:hover{border-color:var(--border);}
-.product-card h3{font-size:0.95rem;font-weight:700;margin-bottom:5px;}
-.product-card p{font-size:0.82rem;color:var(--t2);line-height:1.55;margin-bottom:10px;}
-.product-status{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;padding:2px 8px;border-radius:3px;}
-.ps-active{background:var(--accent-s);color:var(--accent);}
-.ps-building{background:rgba(245,158,11,0.08);color:#b45309;}
+/* ── Hero ── */
+.hero { padding: 120px 40px 80px; max-width: 1200px; margin: 0 auto; text-align: center; }
+.hero-tag { display: inline-block; padding: 6px 14px; background: var(--accent-light); border-radius: 20px; color: var(--accent); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 24px; }
+.hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.2; letter-spacing: -1px; margin-bottom: 20px; }
+.hero-title-highlight { color: var(--accent); }
+.hero-desc { font-size: 1.15rem; color: var(--t2); line-height: 1.6; max-width: 600px; margin: 0 auto 40px; }
+.hero-cta { display: flex; gap: 16px; justify-content: center; margin-bottom: 60px; flex-wrap: wrap; }
+.btn-primary { padding: 14px 32px; border: none; border-radius: 10px; background: var(--accent); color: #fff; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.25s; box-shadow: 0 4px 20px rgba(5,150,105,0.2); }
+.btn-primary:hover { background: var(--accent-h); box-shadow: 0 8px 30px rgba(5,150,105,0.3); transform: translateY(-2px); }
+.btn-primary:active { transform: translateY(0); box-shadow: 0 2px 10px rgba(5,150,105,0.2); }
+.btn-secondary { padding: 14px 32px; border: 1px solid var(--border); border-radius: 10px; background: transparent; color: var(--t1); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.25s; }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-s); }
 
-.about-block{background:var(--surface);border:1px solid var(--border-l);border-radius:var(--r);padding:24px;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,0.02);}
-.about-block h3{font-size:0.95rem;font-weight:700;margin-bottom:10px;}
-.about-block p{font-size:0.84rem;color:var(--t2);line-height:1.65;margin-bottom:8px;}
+/* ── Features ── */
+.features { background: var(--surface); padding: 80px 40px; margin-top: 60px; border-top: 1px solid var(--border-l); border-bottom: 1px solid var(--border-l); }
+.features-inner { max-width: 1200px; margin: 0 auto; }
+.section-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; text-align: center; }
+.section-desc { font-size: 1rem; color: var(--t2); text-align: center; margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 40px; }
+.feature-card { text-align: center; }
+.feature-icon { width: 60px; height: 60px; background: var(--accent-s); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 20px; }
+.feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+.feature-card p { font-size: 0.95rem; color: var(--t2); line-height: 1.6; }
 
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--t1);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:0.8rem;font-weight:500;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,0.12);opacity:0;transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+/* ── How It Works ── */
+.how-it-works { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
+.step-card { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 40px 30px; text-align: center; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+.step-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); transform: translateY(-4px); }
+.step-number { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: var(--accent); color: #fff; border-radius: 50%; font-weight: 800; font-size: 1.3rem; margin-bottom: 20px; }
+.step-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+.step-card p { font-size: 0.9rem; color: var(--t2); line-height: 1.6; }
+
+/* ── App Layout ── */
+.container { max-width: 900px; margin: 0 auto; padding: 60px 40px 80px; }
+.page { display: none; animation: fadeIn 0.25s ease; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.page-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
+.page-desc { font-size: 1rem; color: var(--t2); margin-bottom: 40px; }
+
+/* ── Idea Form ── */
+.idea-input { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 28px; margin-bottom: 40px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); transition: border-color 0.2s, box-shadow 0.2s; }
+.idea-input:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
+
+.idea-title-box { background: var(--surface); border: 2px solid var(--input-border); border-radius: 10px; outline: none; font-size: 1.05rem; font-weight: 600; color: var(--t1); padding: 14px 18px; width: 100%; margin-bottom: 16px; transition: all 0.2s; }
+.idea-title-box::placeholder { color: var(--t3); font-weight: 400; }
+.idea-title-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
+.idea-title-box.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+
+.form-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; transition: border-color 0.2s, box-shadow 0.2s; }
+.form-section:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
+.form-section-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--t3); margin-bottom: 10px; display: block; }
+.form-section textarea { width: 100%; background: none; border: none; outline: none; resize: vertical; font-size: 0.95rem; color: var(--t2); line-height: 1.6; min-height: 100px; }
+.form-section textarea::placeholder { color: var(--t3); }
+
+/* ── Footer: Tags + Name + Save ── */
+.idea-input-footer { display: flex; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-l); gap: 10px; flex-wrap: wrap; }
+.idea-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-right: auto; }
+.tag-btn { padding: 0 14px; height: 36px; border-radius: 8px; border: 1.5px solid var(--border); background: none; font-size: 0.72rem; font-weight: 700; color: var(--t3); cursor: pointer; transition: all 0.12s; text-transform: uppercase; letter-spacing: 0.3px; display: inline-flex; align-items: center; }
+.tag-btn:hover, .tag-btn.picked { border-color: var(--accent); color: var(--accent); background: var(--accent-s); }
+
+.autocomplete-wrap { position: relative; }
+.saved-by-box { background: var(--surface); border: 2px solid var(--input-border); border-radius: 8px; outline: none; font-size: 0.85rem; font-weight: 500; color: var(--t1); padding: 0 12px; width: 150px; height: 36px; transition: all 0.2s; }
+.saved-by-box::placeholder { color: var(--input-border); }
+.saved-by-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
+.saved-by-box.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+
+.save-btn { padding: 0 24px; height: 36px; border: none; border-radius: 8px; background: var(--accent); color: #fff; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.save-btn:hover { background: var(--accent-h); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(5,150,105,0.25); }
+.save-btn:active { transform: scale(0.97); box-shadow: none; }
+
+/* ── Autocomplete Dropdown ── */
+.autocomplete-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); z-index: 1000; display: none; max-height: 200px; overflow-y: auto; }
+.autocomplete-dropdown.show { display: block; }
+.autocomplete-item { padding: 12px 14px; cursor: pointer; font-size: 0.9rem; color: var(--t2); border-bottom: 1px solid var(--border-l); }
+.autocomplete-item:last-child { border-bottom: none; }
+.autocomplete-item:hover { background: var(--hover); color: var(--t1); font-weight: 600; }
+
+/* ── Idea List ── */
+.ideas-count { font-size: 0.75rem; font-weight: 700; color: var(--t3); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+.idea-item { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 22px 24px; margin-bottom: 12px; transition: border-color 0.15s, box-shadow 0.15s; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+.idea-item:hover { border-color: var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+.idea-item h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; padding-right: 28px; line-height: 1.4; }
+.idea-item p { font-size: 0.9rem; color: var(--t2); line-height: 1.6; white-space: pre-wrap; }
+.idea-item-meta { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.idea-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 4px 9px; border-radius: 4px; background: var(--accent-s); color: var(--accent); }
+.idea-date { font-size: 0.7rem; color: var(--t3); }
+.idea-by { font-size: 0.75rem; font-weight: 600; color: var(--accent); background: var(--accent-light); padding: 3px 8px; border-radius: 4px; }
+.idea-del { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--t3); cursor: pointer; font-size: 0.85rem; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: all 0.12s; }
+.idea-item:hover .idea-del { opacity: 1; }
+.idea-del:hover { background: var(--red-s); color: var(--red); }
+.empty { text-align: center; padding: 60px 20px; color: var(--t3); }
+.loading { text-align: center; padding: 60px 20px; color: var(--t3); font-size: 0.95rem; }
+
+/* ── Products ── */
+.product-card { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 24px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: all 0.3s; }
+.product-card:hover { border-color: var(--border); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+.product-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.product-card p { font-size: 0.9rem; color: var(--t2); line-height: 1.6; margin-bottom: 12px; }
+.product-status { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 4px 10px; border-radius: 4px; display: inline-block; }
+.ps-active { background: var(--accent-s); color: var(--accent); }
+.ps-building { background: rgba(245,158,11,0.08); color: #b45309; }
+
+/* ── About ── */
+.about-block { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 32px; margin-bottom: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+.about-block h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; }
+.about-block p { font-size: 0.95rem; color: var(--t2); line-height: 1.7; margin-bottom: 12px; }
+
+/* ── Toast ── */
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--t1); color: #fff; padding: 12px 20px; border-radius: var(--r); font-size: 0.85rem; font-weight: 500; z-index: 100; box-shadow: 0 12px 32px rgba(0,0,0,0.15); opacity: 0; transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.2rem; }
+  .hero { padding: 80px 24px 60px; }
+  .nav-inner { padding: 0 20px; }
+  .features { padding: 60px 24px; }
+  .how-it-works { padding: 60px 24px; }
+  .container { padding: 40px 24px 60px; }
+  .section-title { font-size: 1.6rem; }
+  .features-grid { gap: 24px; }
+}
 </style>
 </head>
 <body>
-<nav><div class="nav-inner">
-  <div class="logo"><span class="logo-mark">IV</span>IdeaVolt</div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="go('ideas')">Ideas</button>
-    <button class="nav-tab" onclick="go('products')">Products</button>
-    <button class="nav-tab" onclick="go('about')">About</button>
-  </div>
-</div></nav>
 
+<!-- Navigation -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="go('home')"><span class="logo-mark">IV</span>IdeaVolt</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="go('home')">Home</button>
+      <button class="nav-tab" onclick="go('ideas')">Ideas</button>
+      <button class="nav-tab" onclick="go('products')">Products</button>
+      <button class="nav-tab" onclick="go('about')">About</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Home Page -->
+<div class="page active" id="pg-home">
+  <div class="hero">
+    <div class="hero-tag">Capture Ideas That Matter</div>
+    <h1 class="hero-title">Ideas disappear in <span class="hero-title-highlight">seconds.</span><br>We make them <span class="hero-title-highlight">stick.</span></h1>
+    <p class="hero-desc">Inspiration strikes at unexpected moments. Before meetings. In the shower. At 2 AM. IdeaVolt is where those fleeting thoughts become the foundation of your best work.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="go('ideas')">Start Capturing</button>
+      <button class="btn-secondary" onclick="go('about')">Learn More</button>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="features-inner">
+      <h2 class="section-title">Built for the way your mind works.</h2>
+      <p class="section-desc">No friction. No complexity. Just you and your ideas.</p>
+      <div class="features-grid">
+        <div class="feature-card"><div class="feature-icon">&#x26A1;</div><h3>Lightning Fast</h3><p>Open, type, save in under 3 seconds. Your ideas shouldn't wait for technology.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F3AF;</div><h3>Smart Tagging</h3><p>Organize ideas by type. Features, design thoughts, quick fixes, growth ideas all in one place.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F512;</div><h3>Always Safe</h3><p>Your ideas are secure. End-to-end protected with enterprise-grade infrastructure.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F4C5;</div><h3>Time Stamped</h3><p>Never lose context. Every idea is timestamped so you remember when inspiration struck.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F319;</div><h3>Always Available</h3><p>Access your ideas anywhere, anytime. On your phone, tablet, or desktop always in sync.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F680;</div><h3>Built for Action</h3><p>Turn captured ideas into reality. Your idea vault is the starting point for innovation.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-it-works">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-desc">Three simple steps to never lose an idea again.</p>
+    <div class="steps-grid">
+      <div class="step-card"><div class="step-number">1</div><h3>Capture</h3><p>Write your idea. Add context if you want. Tag it for easy finding later.</p></div>
+      <div class="step-card"><div class="step-number">2</div><h3>Organize</h3><p>Filter by type. Search through your vault. Find that brilliant thought from last month.</p></div>
+      <div class="step-card"><div class="step-number">3</div><h3>Execute</h3><p>When the time is right, turn your ideas into strategy and action.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Ideas / Products / About Pages -->
 <div class="container">
-  <div class="page active" id="pg-ideas">
+  <div class="page" id="pg-ideas">
     <h1 class="page-title">Ideas</h1>
     <p class="page-desc">Drop it before you forget it.</p>
     <div class="idea-input">
-      <input type="text" id="iTitle" placeholder="What's the idea?"/>
-      <textarea id="iBody" placeholder="Describe it... why does it matter? what's the impact?"></textarea>
+      <input type="text" id="iTitle" class="idea-title-box" placeholder="What's the idea?">
+      <div class="form-section">
+        <label class="form-section-label">Describe it</label>
+        <textarea id="iBody" placeholder="Why does it matter? What's the impact? Add context..."></textarea>
+      </div>
       <div class="idea-input-footer">
         <div class="idea-tags">
           <button class="tag-btn picked" data-t="general" onclick="pickTag(this)">General</button>
@@ -101,6 +241,10 @@ nav{position:sticky;top:0;z-index:10;padding:14px 0;background:rgba(250,250,249,
           <button class="tag-btn" data-t="design" onclick="pickTag(this)">Design</button>
           <button class="tag-btn" data-t="fix" onclick="pickTag(this)">Fix</button>
           <button class="tag-btn" data-t="growth" onclick="pickTag(this)">Growth</button>
+        </div>
+        <div class="autocomplete-wrap">
+          <input type="text" id="iSavedBy" class="saved-by-box" placeholder="Your name *" required>
+          <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
         </div>
         <button class="save-btn" onclick="saveIdea()">Save</button>
       </div>
@@ -120,7 +264,7 @@ nav{position:sticky;top:0;z-index:10;padding:14px 0;background:rgba(250,250,249,
     <p class="page-desc">Why this exists.</p>
     <div class="about-block">
       <h3>IdeaVolt</h3>
-      <p>Ideas hit at random — during a code review, on a walk, at 2 AM. Most disappear before they're written down.</p>
+      <p>Ideas hit at random during a code review, on a walk, at 2 AM. Most disappear before they're written down.</p>
       <p>This is a simple place to drop them. Open it, type it, save it. Come back later and they're still here.</p>
       <p>No project boards, no workflows, no complexity. Just a place for ideas to land.</p>
     </div>
@@ -130,13 +274,48 @@ nav{position:sticky;top:0;z-index:10;padding:14px 0;background:rgba(250,250,249,
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══ SUPABASE — injected at build time by Netlify ═══
+/* ── Supabase (injected at build time) ── */
 const SUPABASE_URL = '__SUPABASE_URL__';
 const SUPABASE_KEY = '__SUPABASE_KEY__';
 const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentTag = 'general';
 
+/* ── Name Autocomplete ── */
+function loadSavedNames() {
+  const saved = localStorage.getItem('ideaVoltNames');
+  return saved ? JSON.parse(saved) : [];
+}
+
+function saveNameToStorage(name) {
+  if (!name.trim()) return;
+  const names = loadSavedNames();
+  if (!names.includes(name)) {
+    names.push(name);
+    localStorage.setItem('ideaVoltNames', JSON.stringify(names));
+  }
+}
+
+function showAutocomplete(value) {
+  const dropdown = document.getElementById('autocompleteDropdown');
+  if (value.trim()) document.getElementById('iSavedBy').classList.remove('error');
+  if (!value.trim()) { dropdown.classList.remove('show'); return; }
+
+  const filtered = loadSavedNames().filter(n => n.toLowerCase().startsWith(value.toLowerCase()));
+  if (!filtered.length) { dropdown.classList.remove('show'); return; }
+
+  dropdown.innerHTML = filtered.map(n =>
+    '<div class="autocomplete-item" onclick="selectName(\'' + esc(n) + '\')">' + esc(n) + '</div>'
+  ).join('');
+  dropdown.classList.add('show');
+}
+
+function selectName(name) {
+  document.getElementById('iSavedBy').value = name;
+  document.getElementById('autocompleteDropdown').classList.remove('show');
+}
+
+/* ── CRUD ── */
 async function loadIdeas() {
   try {
     const { data, error } = await sbClient.from('ideas').select('*').order('created_at', { ascending: false });
@@ -147,15 +326,26 @@ async function loadIdeas() {
 
 async function saveIdea() {
   const title = document.getElementById('iTitle').value.trim();
-  const body = document.getElementById('iBody').value.trim();
-  if (!title) { notify('Give your idea a title'); return; }
+  const body  = document.getElementById('iBody').value.trim();
+  const savedBy = document.getElementById('iSavedBy').value.trim();
+  const titleEl = document.getElementById('iTitle');
+  const nameEl  = document.getElementById('iSavedBy');
+
+  titleEl.classList.remove('error');
+  nameEl.classList.remove('error');
+
+  if (!title)   { titleEl.classList.add('error'); notify('Give your idea a title'); titleEl.focus(); return; }
+  if (!savedBy) { nameEl.classList.add('error');  notify('Please enter your name'); nameEl.focus();  return; }
+
   try {
-    const { error } = await sbClient.from('ideas').insert({ title, body, tag: currentTag });
+    saveNameToStorage(savedBy);
+    const { error } = await sbClient.from('ideas').insert({ title, body, tag: currentTag, saved_by: savedBy });
     if (error) throw error;
-    document.getElementById('iTitle').value = '';
+    titleEl.value = '';
     document.getElementById('iBody').value = '';
+    nameEl.value = '';
     await render();
-    notify('Saved ✓');
+    notify('Saved');
   } catch (e) { console.error('Save error:', e); notify('Failed to save'); }
 }
 
@@ -169,49 +359,71 @@ async function delIdea(id) {
   } catch (e) { console.error('Delete error:', e); notify('Failed to delete'); }
 }
 
+/* ── Navigation ── */
 function go(pg) {
-  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
   document.getElementById('pg-' + pg).classList.add('active');
-  document.querySelectorAll('.nav-tab')[['ideas', 'products', 'about'].indexOf(pg)].classList.add('active');
+  document.querySelectorAll('.nav-tab')[['home','ideas','products','about'].indexOf(pg)].classList.add('active');
 }
 
 function pickTag(btn) {
-  document.querySelectorAll('.tag-btn').forEach(x => x.classList.remove('picked'));
+  document.querySelectorAll('.tag-btn').forEach(el => el.classList.remove('picked'));
   btn.classList.add('picked');
   currentTag = btn.dataset.t;
 }
 
+/* ── Rendering ── */
 async function render() {
   const ideas = await loadIdeas();
   document.getElementById('ideasCount').textContent = ideas.length + ' idea' + (ideas.length !== 1 ? 's' : '');
-  if (!ideas.length) { document.getElementById('ideasList').innerHTML = '<div class="empty">No ideas yet. Type one above and hit Save.</div>'; return; }
-  document.getElementById('ideasList').innerHTML = ideas.map(i => `
-    <div class="idea-item">
-      <button class="idea-del" onclick="delIdea(${i.id})" title="Delete">✕</button>
-      <h3>${esc(i.title)}</h3>
-      ${i.body ? `<p>${esc(i.body)}</p>` : ''}
-      <div class="idea-item-meta">
-        <span class="idea-tag">${esc(i.tag || 'general')}</span>
-        <span class="idea-date">${fmtD(i.created_at)}</span>
-      </div>
-    </div>`).join('');
+  if (!ideas.length) {
+    document.getElementById('ideasList').innerHTML = '<div class="empty">No ideas yet. Type one above and hit Save.</div>';
+    return;
+  }
+  document.getElementById('ideasList').innerHTML = ideas.map(i =>
+    '<div class="idea-item">' +
+      '<button class="idea-del" onclick="delIdea(' + i.id + ')" title="Delete">&#x2715;</button>' +
+      '<h3>' + esc(i.title) + '</h3>' +
+      (i.body ? '<p>' + esc(i.body) + '</p>' : '') +
+      '<div class="idea-item-meta">' +
+        '<span class="idea-tag">' + esc(i.tag || 'general') + '</span>' +
+        '<span class="idea-date">' + fmtD(i.created_at) + '</span>' +
+        (i.saved_by ? '<span class="idea-by">by ' + esc(i.saved_by) + '</span>' : '') +
+      '</div>' +
+    '</div>'
+  ).join('');
 }
 
 function renderProducts() {
-  document.getElementById('productsList').innerHTML = [
-    { name: 'Main Website', desc: 'Primary web presence — currently being built from scratch.', status: 'Building', cls: 'ps-building' },
+  var products = [
+    { name: 'Main Website', desc: 'Primary web presence currently being built from scratch.', status: 'Building', cls: 'ps-building' },
     { name: 'IdeaVolt', desc: 'This site. A simple place to capture ideas.', status: 'Active', cls: 'ps-active' }
-  ].map(p => `<div class="product-card"><h3>${p.name}</h3><p>${p.desc}</p><span class="product-status ${p.cls}">${p.status}</span></div>`).join('');
+  ];
+  document.getElementById('productsList').innerHTML = products.map(function(p) {
+    return '<div class="product-card"><h3>' + p.name + '</h3><p>' + p.desc + '</p><span class="product-status ' + p.cls + '">' + p.status + '</span></div>';
+  }).join('');
 }
 
-function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+/* ── Utilities ── */
+function esc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 function fmtD(d) { return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
-function notify(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
+function notify(msg) { var t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function() { t.classList.remove('show'); }, 2200); }
+
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded', function() {
+  var input = document.getElementById('iSavedBy');
+  if (input) {
+    input.addEventListener('input', function(e) { showAutocomplete(e.target.value); });
+    input.addEventListener('blur', function() { setTimeout(function() { document.getElementById('autocompleteDropdown').classList.remove('show'); }, 200); });
+  }
+});
 
 render();
 renderProducts();
-document.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { if (document.querySelector('.page.active').id === 'pg-ideas') saveIdea(); } });
+document.addEventListener('keydown', function(e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && document.querySelector('.page.active').id === 'pg-ideas') saveIdea();
+});
 </script>
 </body>
 </html>
