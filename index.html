@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IdeaVolt — Capture Ideas Before They Disappear</title>
+<title>Context Data Fabric - Unified Data Intelligence Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-/* ── Design Tokens ── */
+/* -- Design Tokens -- */
 :root {
   --bg: #FAFAF9;
   --surface: #FFFFFF;
@@ -28,23 +28,23 @@
   --r: 12px;
 }
 
-/* ── Reset ── */
+/* -- Reset -- */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--t1); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 input, button, textarea { font-family: inherit; }
 ::selection { background: var(--accent); color: #fff; }
 
-/* ── Navigation ── */
+/* -- Navigation -- */
 nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(250,250,249,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-l); }
 .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; }
 .logo { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; color: var(--t1); cursor: pointer; }
-.logo-mark { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.65rem; color: #fff; }
+.logo-mark { width: 32px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.55rem; color: #fff; }
 .nav-tabs { display: flex; gap: 2px; }
 .nav-tab { padding: 8px 16px; border: none; background: none; font-size: 0.85rem; font-weight: 600; color: var(--t3); cursor: pointer; border-radius: 8px; transition: all 0.12s; }
 .nav-tab:hover { color: var(--t2); background: var(--hover); }
 .nav-tab.active { color: var(--accent); background: var(--accent-s); }
 
-/* ── Hero ── */
+/* -- Hero -- */
 .hero { padding: 120px 40px 80px; max-width: 1200px; margin: 0 auto; text-align: center; }
 .hero-tag { display: inline-block; padding: 6px 14px; background: var(--accent-light); border-radius: 20px; color: var(--accent); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 24px; }
 .hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.2; letter-spacing: -1px; margin-bottom: 20px; }
@@ -57,7 +57,7 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 .btn-secondary { padding: 14px 32px; border: 1px solid var(--border); border-radius: 10px; background: transparent; color: var(--t1); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.25s; }
 .btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-s); }
 
-/* ── Features ── */
+/* -- Features -- */
 .features { background: var(--surface); padding: 80px 40px; margin-top: 60px; border-top: 1px solid var(--border-l); border-bottom: 1px solid var(--border-l); }
 .features-inner { max-width: 1200px; margin: 0 auto; }
 .section-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; text-align: center; }
@@ -68,7 +68,7 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
 .feature-card p { font-size: 0.95rem; color: var(--t2); line-height: 1.6; }
 
-/* ── How It Works ── */
+/* -- How It Works -- */
 .how-it-works { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
 .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
 .step-card { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 40px 30px; text-align: center; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
@@ -77,7 +77,7 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 .step-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
 .step-card p { font-size: 0.9rem; color: var(--t2); line-height: 1.6; }
 
-/* ── App Layout ── */
+/* -- App Layout -- */
 .container { max-width: 900px; margin: 0 auto; padding: 60px 40px 80px; }
 .page { display: none; animation: fadeIn 0.25s ease; }
 .page.active { display: block; }
@@ -85,45 +85,41 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 .page-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
 .page-desc { font-size: 1rem; color: var(--t2); margin-bottom: 40px; }
 
-/* ── Idea Form ── */
+/* -- Idea Form -- */
 .idea-input { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 28px; margin-bottom: 40px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); transition: border-color 0.2s, box-shadow 0.2s; }
 .idea-input:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
-
 .idea-title-box { background: var(--surface); border: 2px solid var(--input-border); border-radius: 10px; outline: none; font-size: 1.05rem; font-weight: 600; color: var(--t1); padding: 14px 18px; width: 100%; margin-bottom: 16px; transition: all 0.2s; }
 .idea-title-box::placeholder { color: var(--t3); font-weight: 400; }
 .idea-title-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
 .idea-title-box.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
-
 .form-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; transition: border-color 0.2s, box-shadow 0.2s; }
 .form-section:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
 .form-section-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--t3); margin-bottom: 10px; display: block; }
 .form-section textarea { width: 100%; background: none; border: none; outline: none; resize: vertical; font-size: 0.95rem; color: var(--t2); line-height: 1.6; min-height: 100px; }
 .form-section textarea::placeholder { color: var(--t3); }
 
-/* ── Footer: Tags + Name + Save ── */
+/* -- Footer: Tags + Name + Save -- */
 .idea-input-footer { display: flex; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-l); gap: 10px; flex-wrap: wrap; }
 .idea-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-right: auto; }
 .tag-btn { padding: 0 14px; height: 36px; border-radius: 8px; border: 1.5px solid var(--border); background: none; font-size: 0.72rem; font-weight: 700; color: var(--t3); cursor: pointer; transition: all 0.12s; text-transform: uppercase; letter-spacing: 0.3px; display: inline-flex; align-items: center; }
 .tag-btn:hover, .tag-btn.picked { border-color: var(--accent); color: var(--accent); background: var(--accent-s); }
-
 .autocomplete-wrap { position: relative; }
 .saved-by-box { background: var(--surface); border: 2px solid var(--input-border); border-radius: 8px; outline: none; font-size: 0.85rem; font-weight: 500; color: var(--t1); padding: 0 12px; width: 150px; height: 36px; transition: all 0.2s; }
 .saved-by-box::placeholder { color: var(--input-border); }
 .saved-by-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
 .saved-by-box.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
-
 .save-btn { padding: 0 24px; height: 36px; border: none; border-radius: 8px; background: var(--accent); color: #fff; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
 .save-btn:hover { background: var(--accent-h); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(5,150,105,0.25); }
 .save-btn:active { transform: scale(0.97); box-shadow: none; }
 
-/* ── Autocomplete Dropdown ── */
+/* -- Autocomplete Dropdown -- */
 .autocomplete-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); z-index: 1000; display: none; max-height: 200px; overflow-y: auto; }
 .autocomplete-dropdown.show { display: block; }
 .autocomplete-item { padding: 12px 14px; cursor: pointer; font-size: 0.9rem; color: var(--t2); border-bottom: 1px solid var(--border-l); }
 .autocomplete-item:last-child { border-bottom: none; }
 .autocomplete-item:hover { background: var(--hover); color: var(--t1); font-weight: 600; }
 
-/* ── Idea List ── */
+/* -- Idea List -- */
 .ideas-count { font-size: 0.75rem; font-weight: 700; color: var(--t3); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
 .idea-item { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 22px 24px; margin-bottom: 12px; transition: border-color 0.15s, box-shadow 0.15s; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 .idea-item:hover { border-color: var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
@@ -139,25 +135,20 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 .empty { text-align: center; padding: 60px 20px; color: var(--t3); }
 .loading { text-align: center; padding: 60px 20px; color: var(--t3); font-size: 0.95rem; }
 
-/* ── Products ── */
-.product-card { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 24px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: all 0.3s; }
-.product-card:hover { border-color: var(--border); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
-.product-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
-.product-card p { font-size: 0.9rem; color: var(--t2); line-height: 1.6; margin-bottom: 12px; }
+/* -- Products -- */
 .product-status { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 4px 10px; border-radius: 4px; display: inline-block; }
-.ps-active { background: var(--accent-s); color: var(--accent); }
 .ps-building { background: rgba(245,158,11,0.08); color: #b45309; }
 
-/* ── About ── */
+/* -- About -- */
 .about-block { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 32px; margin-bottom: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 .about-block h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; }
 .about-block p { font-size: 0.95rem; color: var(--t2); line-height: 1.7; margin-bottom: 12px; }
 
-/* ── Toast ── */
+/* -- Toast -- */
 .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--t1); color: #fff; padding: 12px 20px; border-radius: var(--r); font-size: 0.85rem; font-weight: 500; z-index: 100; box-shadow: 0 12px 32px rgba(0,0,0,0.15); opacity: 0; transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* ── Responsive ── */
+/* -- Responsive -- */
 @media (max-width: 768px) {
   .hero-title { font-size: 2.2rem; }
   .hero { padding: 80px 24px 60px; }
@@ -175,7 +166,7 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 <!-- Navigation -->
 <nav>
   <div class="nav-inner">
-    <div class="logo" onclick="go('home')"><span class="logo-mark">IV</span>IdeaVolt</div>
+    <div class="logo" onclick="go('home')"><span class="logo-mark">CDF</span>Context Data Fabric</div>
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="go('home')">Home</button>
       <button class="nav-tab" onclick="go('ideas')">Ideas</button>
@@ -188,37 +179,37 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 <!-- Home Page -->
 <div class="page active" id="pg-home">
   <div class="hero">
-    <div class="hero-tag">Capture Ideas That Matter</div>
-    <h1 class="hero-title">Ideas disappear in <span class="hero-title-highlight">seconds.</span><br>We make them <span class="hero-title-highlight">stick.</span></h1>
-    <p class="hero-desc">Inspiration strikes at unexpected moments. Before meetings. In the shower. At 2 AM. IdeaVolt is where those fleeting thoughts become the foundation of your best work.</p>
+    <div class="hero-tag">Unified Data Intelligence</div>
+    <h1 class="hero-title">Your Data. <span class="hero-title-highlight">Connected.</span><br>Your Insights. <span class="hero-title-highlight">Unified.</span></h1>
+    <p class="hero-desc">Context Data Fabric seamlessly integrates, governs, and activates your enterprise data across all sources. Transform fragmented data silos into a unified intelligence layer that powers smarter decisions, faster.</p>
     <div class="hero-cta">
-      <button class="btn-primary" onclick="go('ideas')">Start Capturing</button>
+      <button class="btn-primary" onclick="go('ideas')">Get Started</button>
       <button class="btn-secondary" onclick="go('about')">Learn More</button>
     </div>
   </div>
 
   <div class="features">
     <div class="features-inner">
-      <h2 class="section-title">Built for the way your mind works.</h2>
-      <p class="section-desc">No friction. No complexity. Just you and your ideas.</p>
+      <h2 class="section-title">Enterprise-Grade Data Architecture.</h2>
+      <p class="section-desc">Connect, govern, and activate data across your entire organization.</p>
       <div class="features-grid">
-        <div class="feature-card"><div class="feature-icon">&#x26A1;</div><h3>Lightning Fast</h3><p>Open, type, save in under 3 seconds. Your ideas shouldn't wait for technology.</p></div>
-        <div class="feature-card"><div class="feature-icon">&#x1F3AF;</div><h3>Smart Tagging</h3><p>Organize ideas by type. Features, design thoughts, quick fixes, growth ideas all in one place.</p></div>
-        <div class="feature-card"><div class="feature-icon">&#x1F512;</div><h3>Always Safe</h3><p>Your ideas are secure. End-to-end protected with enterprise-grade infrastructure.</p></div>
-        <div class="feature-card"><div class="feature-icon">&#x1F4C5;</div><h3>Time Stamped</h3><p>Never lose context. Every idea is timestamped so you remember when inspiration struck.</p></div>
-        <div class="feature-card"><div class="feature-icon">&#x1F319;</div><h3>Always Available</h3><p>Access your ideas anywhere, anytime. On your phone, tablet, or desktop always in sync.</p></div>
-        <div class="feature-card"><div class="feature-icon">&#x1F680;</div><h3>Built for Action</h3><p>Turn captured ideas into reality. Your idea vault is the starting point for innovation.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F517;</div><h3>Universal Connectivity</h3><p>Connect to any data source - cloud, on-premise, streaming, or batch. One fabric, infinite possibilities.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F3AF;</div><h3>Intelligent Governance</h3><p>Automated data cataloging, lineage tracking, and policy enforcement across your entire data estate.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F512;</div><h3>Enterprise Security</h3><p>Role-based access control, encryption at rest and in transit, and full compliance with regulatory standards.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F4CA;</div><h3>Real-Time Analytics</h3><p>Stream processing and real-time insights. Make decisions with data that is always current.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F9E0;</div><h3>AI-Ready Platform</h3><p>Built-in ML pipelines and semantic layer for AI/ML workloads. Turn data into intelligence.</p></div>
+        <div class="feature-card"><div class="feature-icon">&#x1F680;</div><h3>Scale Without Limits</h3><p>Elastic architecture that grows with your data. From gigabytes to petabytes, we have you covered.</p></div>
       </div>
     </div>
   </div>
 
   <div class="how-it-works">
-    <h2 class="section-title">How It Works</h2>
-    <p class="section-desc">Three simple steps to never lose an idea again.</p>
+    <h2 class="section-title">How Context Data Fabric Works</h2>
+    <p class="section-desc">Three pillars of unified data management.</p>
     <div class="steps-grid">
-      <div class="step-card"><div class="step-number">1</div><h3>Capture</h3><p>Write your idea. Add context if you want. Tag it for easy finding later.</p></div>
-      <div class="step-card"><div class="step-number">2</div><h3>Organize</h3><p>Filter by type. Search through your vault. Find that brilliant thought from last month.</p></div>
-      <div class="step-card"><div class="step-number">3</div><h3>Execute</h3><p>When the time is right, turn your ideas into strategy and action.</p></div>
+      <div class="step-card"><div class="step-number">1</div><h3>Connect</h3><p>Integrate all your data sources into a unified fabric with our 200+ pre-built connectors and APIs.</p></div>
+      <div class="step-card"><div class="step-number">2</div><h3>Govern</h3><p>Apply automated data quality, lineage, and compliance policies across your entire data ecosystem.</p></div>
+      <div class="step-card"><div class="step-number">3</div><h3>Activate</h3><p>Deliver trusted, contextual data to every team and application that needs it, when they need it.</p></div>
     </div>
   </div>
 </div>
@@ -256,17 +247,20 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
   <div class="page" id="pg-products">
     <h1 class="page-title">Products</h1>
     <p class="page-desc">What's in motion.</p>
-    <div id="productsList"></div>
+    <div class="about-block" style="text-align: center; padding: 60px 32px;">
+      <span class="product-status ps-building" style="font-size: 1rem; padding: 10px 24px;">In Progress</span>
+      <p style="margin-top: 20px; color: var(--t2);">We're building something great. Check back soon.</p>
+    </div>
   </div>
 
   <div class="page" id="pg-about">
     <h1 class="page-title">About</h1>
-    <p class="page-desc">Why this exists.</p>
+    <p class="page-desc">Why Context Data Fabric exists.</p>
     <div class="about-block">
-      <h3>IdeaVolt</h3>
-      <p>Ideas hit at random during a code review, on a walk, at 2 AM. Most disappear before they're written down.</p>
-      <p>This is a simple place to drop them. Open it, type it, save it. Come back later and they're still here.</p>
-      <p>No project boards, no workflows, no complexity. Just a place for ideas to land.</p>
+      <h3>Context Data Fabric</h3>
+      <p>In today's enterprise landscape, data lives everywhere - across clouds, on-premise systems, applications, and data lakes. Organizations struggle with fragmented data, inconsistent governance, and delayed insights.</p>
+      <p>Context Data Fabric was built to solve this challenge. We unify your data ecosystem into a seamless fabric that connects, governs, and activates data wherever it lives.</p>
+      <p>Our platform delivers real-time, trusted data to every team and application - empowering faster decisions and driving business transformation.</p>
     </div>
   </div>
 </div>
@@ -274,14 +268,20 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 <div class="toast" id="toast"></div>
 
 <script>
-/* ── Supabase (injected at build time) ── */
+/* -- Supabase (injected at build time) -- */
 const SUPABASE_URL = '__SUPABASE_URL__';
 const SUPABASE_KEY = '__SUPABASE_KEY__';
-const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let sbClient = null;
+try {
+  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch (e) {
+  console.warn('Supabase not configured:', e.message);
+}
 
 let currentTag = 'general';
+const VALID_PAGES = ['home', 'ideas', 'products', 'about'];
 
-/* ── Name Autocomplete ── */
+/* -- Name Autocomplete -- */
 function loadSavedNames() {
   const saved = localStorage.getItem('ideaVoltNames');
   return saved ? JSON.parse(saved) : [];
@@ -300,13 +300,9 @@ function showAutocomplete(value) {
   const dropdown = document.getElementById('autocompleteDropdown');
   if (value.trim()) document.getElementById('iSavedBy').classList.remove('error');
   if (!value.trim()) { dropdown.classList.remove('show'); return; }
-
   const filtered = loadSavedNames().filter(n => n.toLowerCase().startsWith(value.toLowerCase()));
   if (!filtered.length) { dropdown.classList.remove('show'); return; }
-
-  dropdown.innerHTML = filtered.map(n =>
-    '<div class="autocomplete-item" onclick="selectName(\'' + esc(n) + '\')">' + esc(n) + '</div>'
-  ).join('');
+  dropdown.innerHTML = filtered.map(n => '<div class="autocomplete-item" onclick="selectName(\'' + esc(n) + '\')">' + esc(n) + '</div>').join('');
   dropdown.classList.add('show');
 }
 
@@ -315,8 +311,9 @@ function selectName(name) {
   document.getElementById('autocompleteDropdown').classList.remove('show');
 }
 
-/* ── CRUD ── */
+/* -- CRUD -- */
 async function loadIdeas() {
+  if (!sbClient) return [];
   try {
     const { data, error } = await sbClient.from('ideas').select('*').order('created_at', { ascending: false });
     if (error) throw error;
@@ -326,17 +323,15 @@ async function loadIdeas() {
 
 async function saveIdea() {
   const title = document.getElementById('iTitle').value.trim();
-  const body  = document.getElementById('iBody').value.trim();
+  const body = document.getElementById('iBody').value.trim();
   const savedBy = document.getElementById('iSavedBy').value.trim();
   const titleEl = document.getElementById('iTitle');
-  const nameEl  = document.getElementById('iSavedBy');
-
+  const nameEl = document.getElementById('iSavedBy');
   titleEl.classList.remove('error');
   nameEl.classList.remove('error');
-
-  if (!title)   { titleEl.classList.add('error'); notify('Give your idea a title'); titleEl.focus(); return; }
-  if (!savedBy) { nameEl.classList.add('error');  notify('Please enter your name'); nameEl.focus();  return; }
-
+  if (!title) { titleEl.classList.add('error'); notify('Give your idea a title'); titleEl.focus(); return; }
+  if (!savedBy) { nameEl.classList.add('error'); notify('Please enter your name'); nameEl.focus(); return; }
+  if (!sbClient) { notify('Database not configured'); return; }
   try {
     saveNameToStorage(savedBy);
     const { error } = await sbClient.from('ideas').insert({ title, body, tag: currentTag, saved_by: savedBy });
@@ -351,6 +346,7 @@ async function saveIdea() {
 
 async function delIdea(id) {
   if (!confirm('Delete this idea?')) return;
+  if (!sbClient) { notify('Database not configured'); return; }
   try {
     const { error } = await sbClient.from('ideas').delete().eq('id', id);
     if (error) throw error;
@@ -359,21 +355,27 @@ async function delIdea(id) {
   } catch (e) { console.error('Delete error:', e); notify('Failed to delete'); }
 }
 
-/* ── Navigation ── */
+/* -- Navigation -- */
 function go(pg) {
-  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-  document.getElementById('pg-' + pg).classList.add('active');
-  document.querySelectorAll('.nav-tab')[['home','ideas','products','about'].indexOf(pg)].classList.add('active');
+  window.location.hash = pg;
+}
+
+function handleHash() {
+  var hash = window.location.hash.slice(1) || 'home';
+  if (VALID_PAGES.indexOf(hash) === -1) hash = 'home';
+  document.querySelectorAll('.page').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById('pg-' + hash).classList.add('active');
+  document.querySelectorAll('.nav-tab')[VALID_PAGES.indexOf(hash)].classList.add('active');
 }
 
 function pickTag(btn) {
-  document.querySelectorAll('.tag-btn').forEach(el => el.classList.remove('picked'));
+  document.querySelectorAll('.tag-btn').forEach(function(el) { el.classList.remove('picked'); });
   btn.classList.add('picked');
   currentTag = btn.dataset.t;
 }
 
-/* ── Rendering ── */
+/* -- Rendering -- */
 async function render() {
   const ideas = await loadIdeas();
   document.getElementById('ideasCount').textContent = ideas.length + ' idea' + (ideas.length !== 1 ? 's' : '');
@@ -381,36 +383,21 @@ async function render() {
     document.getElementById('ideasList').innerHTML = '<div class="empty">No ideas yet. Type one above and hit Save.</div>';
     return;
   }
-  document.getElementById('ideasList').innerHTML = ideas.map(i =>
-    '<div class="idea-item">' +
-      '<button class="idea-del" onclick="delIdea(' + i.id + ')" title="Delete">&#x2715;</button>' +
-      '<h3>' + esc(i.title) + '</h3>' +
-      (i.body ? '<p>' + esc(i.body) + '</p>' : '') +
-      '<div class="idea-item-meta">' +
-        '<span class="idea-tag">' + esc(i.tag || 'general') + '</span>' +
-        '<span class="idea-date">' + fmtD(i.created_at) + '</span>' +
-        (i.saved_by ? '<span class="idea-by">by ' + esc(i.saved_by) + '</span>' : '') +
-      '</div>' +
-    '</div>'
-  ).join('');
-}
-
-function renderProducts() {
-  var products = [
-    { name: 'Main Website', desc: 'Primary web presence currently being built from scratch.', status: 'Building', cls: 'ps-building' },
-    { name: 'IdeaVolt', desc: 'This site. A simple place to capture ideas.', status: 'Active', cls: 'ps-active' }
-  ];
-  document.getElementById('productsList').innerHTML = products.map(function(p) {
-    return '<div class="product-card"><h3>' + p.name + '</h3><p>' + p.desc + '</p><span class="product-status ' + p.cls + '">' + p.status + '</span></div>';
+  document.getElementById('ideasList').innerHTML = ideas.map(function(i) {
+    return '<div class="idea-item"><button class="idea-del" onclick="delIdea(' + i.id + ')" title="Delete">&#x2715;</button><h3>' + esc(i.title) + '</h3>' + (i.body ? '<p>' + esc(i.body) + '</p>' : '') + '<div class="idea-item-meta"><span class="idea-tag">' + esc(i.tag || 'general') + '</span><span class="idea-date">' + fmtD(i.created_at) + '</span>' + (i.saved_by ? '<span class="idea-by">by ' + esc(i.saved_by) + '</span>' : '') + '</div></div>';
   }).join('');
 }
 
-/* ── Utilities ── */
+/* -- Utilities -- */
 function esc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 function fmtD(d) { return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
 function notify(msg) { var t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function() { t.classList.remove('show'); }, 2200); }
 
-/* ── Init ── */
+/* -- Init -- */
+handleHash();
+window.addEventListener('hashchange', handleHash);
+render();
+
 document.addEventListener('DOMContentLoaded', function() {
   var input = document.getElementById('iSavedBy');
   if (input) {
@@ -419,8 +406,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-render();
-renderProducts();
 document.addEventListener('keydown', function(e) {
   if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && document.querySelector('.page.active').id === 'pg-ideas') saveIdea();
 });
