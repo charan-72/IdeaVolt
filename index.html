@@ -1,14 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Context Data Fabric - Unified Data Intelligence Platform</title>
+<title>Cognitive Data Fabric</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-/* -- Design Tokens -- */
 :root {
   --bg: #FAFAF9;
   --surface: #FFFFFF;
@@ -27,57 +26,70 @@
   --red-s: rgba(220,38,38,0.06);
   --r: 12px;
 }
-
-/* -- Reset -- */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--t1); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 input, button, textarea { font-family: inherit; }
 ::selection { background: var(--accent); color: #fff; }
 
-/* -- Navigation -- */
+/* ── Nav ── */
 nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(250,250,249,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-l); }
 .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; }
-.logo { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; color: var(--t1); cursor: pointer; }
+.logo { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; color: var(--t1); cursor: pointer; }
 .logo-mark { width: 32px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.55rem; color: #fff; }
 .nav-tabs { display: flex; gap: 2px; }
 .nav-tab { padding: 8px 16px; border: none; background: none; font-size: 0.85rem; font-weight: 600; color: var(--t3); cursor: pointer; border-radius: 8px; transition: all 0.12s; }
 .nav-tab:hover { color: var(--t2); background: var(--hover); }
 .nav-tab.active { color: var(--accent); background: var(--accent-s); }
 
-/* -- Hero -- */
-.hero { padding: 120px 40px 80px; max-width: 1200px; margin: 0 auto; text-align: center; }
-.hero-tag { display: inline-block; padding: 6px 14px; background: var(--accent-light); border-radius: 20px; color: var(--accent); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 24px; }
-.hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.2; letter-spacing: -1px; margin-bottom: 20px; }
-.hero-title-highlight { color: var(--accent); }
-.hero-desc { font-size: 1.15rem; color: var(--t2); line-height: 1.6; max-width: 600px; margin: 0 auto 40px; }
-.hero-cta { display: flex; gap: 16px; justify-content: center; margin-bottom: 60px; flex-wrap: wrap; }
-.btn-primary { padding: 14px 32px; border: none; border-radius: 10px; background: var(--accent); color: #fff; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.25s; box-shadow: 0 4px 20px rgba(5,150,105,0.2); }
-.btn-primary:hover { background: var(--accent-h); box-shadow: 0 8px 30px rgba(5,150,105,0.3); transform: translateY(-2px); }
-.btn-primary:active { transform: translateY(0); box-shadow: 0 2px 10px rgba(5,150,105,0.2); }
-.btn-secondary { padding: 14px 32px; border: 1px solid var(--border); border-radius: 10px; background: transparent; color: var(--t1); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.25s; }
+/* ── Hero ── */
+.hero { padding: 100px 40px 60px; max-width: 900px; margin: 0 auto; text-align: center; }
+.hero h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.15; letter-spacing: -1px; margin-bottom: 16px; }
+.hero h1 span { color: var(--accent); }
+.hero > p { font-size: 1.05rem; color: var(--t2); line-height: 1.6; max-width: 560px; margin: 0 auto; }
+.btn-secondary { padding: 12px 28px; border: 1px solid var(--border); border-radius: 10px; background: transparent; color: var(--t1); font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
 .btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-s); }
 
-/* -- Features -- */
-.features { background: var(--surface); padding: 80px 40px; margin-top: 60px; border-top: 1px solid var(--border-l); border-bottom: 1px solid var(--border-l); }
-.features-inner { max-width: 1200px; margin: 0 auto; }
-.section-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; text-align: center; }
-.section-desc { font-size: 1rem; color: var(--t2); text-align: center; margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 40px; }
-.feature-card { text-align: center; }
-.feature-icon { width: 60px; height: 60px; background: var(--accent-s); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 20px; }
-.feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
-.feature-card p { font-size: 0.95rem; color: var(--t2); line-height: 1.6; }
+/* ── Section Commons ── */
+.section { max-width: 1100px; margin: 0 auto; padding: 72px 40px; }
+.section-alt { background: var(--surface); border-top: 1px solid var(--border-l); border-bottom: 1px solid var(--border-l); }
+.section-alt .section { padding: 72px 40px; }
+.s-label { text-align: center; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 10px; }
+.s-title { text-align: center; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 48px; }
 
-/* -- How It Works -- */
-.how-it-works { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
-.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
-.step-card { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 40px 30px; text-align: center; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-.step-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); transform: translateY(-4px); }
-.step-number { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; background: var(--accent); color: #fff; border-radius: 50%; font-weight: 800; font-size: 1.3rem; margin-bottom: 20px; }
-.step-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
-.step-card p { font-size: 0.9rem; color: var(--t2); line-height: 1.6; }
+/* ── Value Props (3 cards) ── */
+.vp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.vp-card { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 28px 24px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.025); transition: box-shadow 0.2s, transform 0.2s; }
+.vp-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); transform: translateY(-3px); }
+.vp-icon { font-size: 1.6rem; margin-bottom: 14px; }
+.vp-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
+.vp-card p { font-size: 0.82rem; color: var(--t2); line-height: 1.55; }
 
-/* -- App Layout -- */
+/* ── Steps (horizontal) ── */
+.steps { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+.step { flex: 1; min-width: 160px; max-width: 200px; text-align: center; }
+.step-num { width: 36px; height: 36px; background: var(--accent); color: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; margin-bottom: 10px; }
+.step h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 4px; }
+.step p { font-size: 0.75rem; color: var(--t2); line-height: 1.5; }
+
+/* ── Stats ── */
+.stats-row { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; }
+.stat { text-align: center; }
+.stat-num { font-size: 2.4rem; font-weight: 800; color: var(--accent); line-height: 1; }
+.stat-lbl { font-size: 0.78rem; color: var(--t2); margin-top: 6px; }
+
+/* ── Studios Grid ── */
+.studios-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.studio-card { background: var(--bg); border: 1px solid var(--border-l); border-radius: var(--r); padding: 22px; display: flex; gap: 14px; align-items: flex-start; }
+.studio-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+.studio-card h3 { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
+.studio-card p { font-size: 0.78rem; color: var(--t2); line-height: 1.5; }
+
+/* ── CTA Banner ── */
+.cta-banner { text-align: center; padding: 60px 40px; }
+.cta-banner p { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+.cta-banner .sub { font-size: 0.85rem; color: var(--t2); margin-bottom: 20px; }
+
+/* ── App Layout ── */
 .container { max-width: 900px; margin: 0 auto; padding: 60px 40px 80px; }
 .page { display: none; animation: fadeIn 0.25s ease; }
 .page.active { display: block; }
@@ -85,7 +97,7 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 .page-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
 .page-desc { font-size: 1rem; color: var(--t2); margin-bottom: 40px; }
 
-/* -- Idea Form -- */
+/* ── Idea Form ── */
 .idea-input { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 28px; margin-bottom: 40px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); transition: border-color 0.2s, box-shadow 0.2s; }
 .idea-input:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
 .idea-title-box { background: var(--surface); border: 2px solid var(--input-border); border-radius: 10px; outline: none; font-size: 1.05rem; font-weight: 600; color: var(--t1); padding: 14px 18px; width: 100%; margin-bottom: 16px; transition: all 0.2s; }
@@ -97,8 +109,6 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 .form-section-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--t3); margin-bottom: 10px; display: block; }
 .form-section textarea { width: 100%; background: none; border: none; outline: none; resize: vertical; font-size: 0.95rem; color: var(--t2); line-height: 1.6; min-height: 100px; }
 .form-section textarea::placeholder { color: var(--t3); }
-
-/* -- Footer: Tags + Name + Save -- */
 .idea-input-footer { display: flex; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-l); gap: 10px; flex-wrap: wrap; }
 .idea-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-right: auto; }
 .tag-btn { padding: 0 14px; height: 36px; border-radius: 8px; border: 1.5px solid var(--border); background: none; font-size: 0.72rem; font-weight: 700; color: var(--t3); cursor: pointer; transition: all 0.12s; text-transform: uppercase; letter-spacing: 0.3px; display: inline-flex; align-items: center; }
@@ -111,15 +121,11 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 .save-btn { padding: 0 24px; height: 36px; border: none; border-radius: 8px; background: var(--accent); color: #fff; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
 .save-btn:hover { background: var(--accent-h); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(5,150,105,0.25); }
 .save-btn:active { transform: scale(0.97); box-shadow: none; }
-
-/* -- Autocomplete Dropdown -- */
 .autocomplete-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); z-index: 1000; display: none; max-height: 200px; overflow-y: auto; }
 .autocomplete-dropdown.show { display: block; }
 .autocomplete-item { padding: 12px 14px; cursor: pointer; font-size: 0.9rem; color: var(--t2); border-bottom: 1px solid var(--border-l); }
 .autocomplete-item:last-child { border-bottom: none; }
 .autocomplete-item:hover { background: var(--hover); color: var(--t1); font-weight: 600; }
-
-/* -- Idea List -- */
 .ideas-count { font-size: 0.75rem; font-weight: 700; color: var(--t3); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
 .idea-item { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 22px 24px; margin-bottom: 12px; transition: border-color 0.15s, box-shadow 0.15s; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 .idea-item:hover { border-color: var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
@@ -134,84 +140,121 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
 .idea-del:hover { background: var(--red-s); color: var(--red); }
 .empty { text-align: center; padding: 60px 20px; color: var(--t3); }
 .loading { text-align: center; padding: 60px 20px; color: var(--t3); font-size: 0.95rem; }
-
-/* -- Products -- */
 .product-status { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 4px 10px; border-radius: 4px; display: inline-block; }
 .ps-building { background: rgba(245,158,11,0.08); color: #b45309; }
-
-/* -- About -- */
 .about-block { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 32px; margin-bottom: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-.about-block h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; }
 .about-block p { font-size: 0.95rem; color: var(--t2); line-height: 1.7; margin-bottom: 12px; }
-
-/* -- Toast -- */
 .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--t1); color: #fff; padding: 12px 20px; border-radius: var(--r); font-size: 0.85rem; font-weight: 500; z-index: 100; box-shadow: 0 12px 32px rgba(0,0,0,0.15); opacity: 0; transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* -- Responsive -- */
 @media (max-width: 768px) {
-  .hero-title { font-size: 2.2rem; }
-  .hero { padding: 80px 24px 60px; }
+  .hero h1 { font-size: 2.2rem; }
+  .hero { padding: 72px 24px 48px; }
   .nav-inner { padding: 0 20px; }
-  .features { padding: 60px 24px; }
-  .how-it-works { padding: 60px 24px; }
+  .section, .section-alt .section { padding: 48px 24px; }
+  .s-title { font-size: 1.5rem; }
+  .vp-grid { grid-template-columns: 1fr; }
+  .studios-grid { grid-template-columns: 1fr; }
+  .steps { flex-direction: column; align-items: center; }
+  .stats-row { gap: 32px; }
   .container { padding: 40px 24px 60px; }
-  .section-title { font-size: 1.6rem; }
-  .features-grid { gap: 24px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Navigation -->
 <nav>
   <div class="nav-inner">
-    <div class="logo" onclick="go('home')"><span class="logo-mark">CDF</span>Context Data Fabric</div>
+    <div class="logo" onclick="go('home')"><span class="logo-mark">CDF</span>Cognitive Data Fabric</div>
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="go('home')">Home</button>
       <button class="nav-tab" onclick="go('ideas')">Ideas</button>
       <button class="nav-tab" onclick="go('products')">Products</button>
-      <button class="nav-tab" onclick="go('about')">About</button>
+      <button class="nav-tab" onclick="go('about')">About Us</button>
     </div>
   </div>
 </nav>
 
 <!-- Home Page -->
 <div class="page active" id="pg-home">
+
   <div class="hero">
-    <div class="hero-tag">Unified Data Intelligence</div>
-    <h1 class="hero-title">Your Data. <span class="hero-title-highlight">Connected.</span><br>Your Insights. <span class="hero-title-highlight">Unified.</span></h1>
-    <p class="hero-desc">Context Data Fabric seamlessly integrates, governs, and activates your enterprise data across all sources. Transform fragmented data silos into a unified intelligence layer that powers smarter decisions, faster.</p>
-    <div class="hero-cta">
-      <button class="btn-primary" onclick="go('ideas')">Get Started</button>
-      <button class="btn-secondary" onclick="go('about')">Learn More</button>
-    </div>
+    <h1>Your AI Agents Are Lost.<br><span>We Give Them a Map.</span></h1>
+    <p>One platform to define, connect, and govern all your business context so every AI agent gives the same trusted answer.</p>
   </div>
 
-  <div class="features">
-    <div class="features-inner">
-      <h2 class="section-title">Enterprise-Grade Data Architecture.</h2>
-      <p class="section-desc">Connect, govern, and activate data across your entire organization.</p>
-      <div class="features-grid">
-        <div class="feature-card"><div class="feature-icon">&#x1F517;</div><h3>Universal Connectivity</h3><p>Connect to any data source - cloud, on-premise, streaming, or batch. One fabric, infinite possibilities.</p></div>
-        <div class="feature-card"><div class="feature-icon">&#x1F3AF;</div><h3>Intelligent Governance</h3><p>Automated data cataloging, lineage tracking, and policy enforcement across your entire data estate.</p></div>
-        <div class="feature-card"><div class="feature-icon">&#x1F512;</div><h3>Enterprise Security</h3><p>Role-based access control, encryption at rest and in transit, and full compliance with regulatory standards.</p></div>
-        <div class="feature-card"><div class="feature-icon">&#x1F4CA;</div><h3>Real-Time Analytics</h3><p>Stream processing and real-time insights. Make decisions with data that is always current.</p></div>
-        <div class="feature-card"><div class="feature-icon">&#x1F9E0;</div><h3>AI-Ready Platform</h3><p>Built-in ML pipelines and semantic layer for AI/ML workloads. Turn data into intelligence.</p></div>
-        <div class="feature-card"><div class="feature-icon">&#x1F680;</div><h3>Scale Without Limits</h3><p>Elastic architecture that grows with your data. From gigabytes to petabytes, we have you covered.</p></div>
+  <!-- The Problem -->
+  <div class="section-alt">
+    <div class="section">
+      <div class="s-label">The Problem</div>
+      <div class="s-title">Three AIs. Three Answers. Zero Trust.</div>
+      <div class="vp-grid">
+        <div class="vp-card">
+          <div class="vp-icon">&#x26A0;&#xFE0F;</div>
+          <h3>Inconsistent Answers</h3>
+          <p>Analytics says $14.2M. Sales says $16.8M. Finance says $13.9M. Same question, three numbers.</p>
+        </div>
+        <div class="vp-card">
+          <div class="vp-icon">&#x1F9E0;</div>
+          <h3>Tribal Knowledge</h3>
+          <p>Critical business logic lives in people's heads, Slack threads, and spreadsheets nobody can find.</p>
+        </div>
+        <div class="vp-card">
+          <div class="vp-icon">&#x23F3;</div>
+          <h3>Data Team Bottleneck</h3>
+          <p>40% of time re-explaining logic. Your data team is the human API and it doesn't scale.</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="how-it-works">
-    <h2 class="section-title">How Context Data Fabric Works</h2>
-    <p class="section-desc">Three pillars of unified data management.</p>
-    <div class="steps-grid">
-      <div class="step-card"><div class="step-number">1</div><h3>Connect</h3><p>Integrate all your data sources into a unified fabric with our 200+ pre-built connectors and APIs.</p></div>
-      <div class="step-card"><div class="step-number">2</div><h3>Govern</h3><p>Apply automated data quality, lineage, and compliance policies across your entire data ecosystem.</p></div>
-      <div class="step-card"><div class="step-number">3</div><h3>Activate</h3><p>Deliver trusted, contextual data to every team and application that needs it, when they need it.</p></div>
+  <!-- How It Works -->
+  <div class="section">
+    <div class="s-label">How It Works</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h4>Define</h4><p>What terms &amp; metrics mean</p></div>
+      <div class="step"><div class="step-num">2</div><h4>Remember</h4><p>Every decision &amp; why</p></div>
+      <div class="step"><div class="step-num">3</div><h4>Connect</h4><p>Knowledge graph of relationships</p></div>
+      <div class="step"><div class="step-num">4</div><h4>Serve</h4><p>Context to any AI via MCP</p></div>
+      <div class="step"><div class="step-num">5</div><h4>Compound</h4><p>Smarter with every use</p></div>
     </div>
   </div>
+
+  <!-- Studios -->
+  <div class="section-alt">
+    <div class="section">
+      <div class="s-label">What Ships Today</div>
+      <div class="s-title">Four Studios. Complete Stack.</div>
+      <div class="studios-grid">
+        <div class="studio-card"><div class="studio-icon">&#x1F9E9;</div><div><h3>Context Studio</h3><p>Visual graph modeler. Auto PK/FK detection. Master Node grouping.</p></div></div>
+        <div class="studio-card"><div class="studio-icon">&#x1F4CF;</div><div><h3>Metric Studio</h3><p>6 metric types. AI suggestions. DAG resolver. Query preview.</p></div></div>
+        <div class="studio-card"><div class="studio-icon">&#x1F4D6;</div><div><h3>Business Glossary</h3><p>One definition per term. Impact analysis. Bidirectional lineage.</p></div></div>
+        <div class="studio-card"><div class="studio-icon">&#x1F4DC;</div><div><h3>Decision History</h3><p>WHY, WHO, WHEN for every change. Auto-injected into AI prompts.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="section">
+    <div class="s-label">Compounding Returns</div>
+    <div class="s-title">The Longer You Use It, the Wider the Moat.</div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">15K+</div><div class="stat-lbl">Decisions captured</div></div>
+      <div class="stat"><div class="stat-num">3K+</div><div class="stat-lbl">Terms governed</div></div>
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-lbl">Models onboarded</div></div>
+      <div class="stat"><div class="stat-num">40%</div><div class="stat-lbl">Less re-explaining</div></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="section-alt">
+    <div class="cta-banner">
+      <p>Ready to give your AI agents real context?</p>
+      <div class="sub">One platform. Every definition. Total trust.</div>
+      <button class="btn-secondary" onclick="go('about')">Learn More</button>
+    </div>
+  </div>
+
 </div>
 
 <!-- Ideas / Products / About Pages -->
@@ -254,14 +297,6 @@ nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(2
   </div>
 
   <div class="page" id="pg-about">
-    <h1 class="page-title">About</h1>
-    <p class="page-desc">Why Context Data Fabric exists.</p>
-    <div class="about-block">
-      <h3>Context Data Fabric</h3>
-      <p>In today's enterprise landscape, data lives everywhere - across clouds, on-premise systems, applications, and data lakes. Organizations struggle with fragmented data, inconsistent governance, and delayed insights.</p>
-      <p>Context Data Fabric was built to solve this challenge. We unify your data ecosystem into a seamless fabric that connects, governs, and activates data wherever it lives.</p>
-      <p>Our platform delivers real-time, trusted data to every team and application - empowering faster decisions and driving business transformation.</p>
-    </div>
   </div>
 </div>
 
