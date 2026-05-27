@@ -5,378 +5,1463 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cognitive Data Fabric</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+
+/* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
 :root {
-  --bg: #FAFAF9;
-  --surface: #FFFFFF;
-  --hover: #F4F4F2;
-  --border: #E5E5E3;
-  --border-l: #EEEEEC;
-  --input-border: #9CA3AF;
-  --t1: #1A1A1A;
-  --t2: #6B6B6B;
-  --t3: #9A9A9A;
-  --accent: #059669;
-  --accent-s: rgba(5,150,105,0.08);
-  --accent-h: #047857;
-  --accent-light: rgba(5,150,105,0.15);
-  --red: #DC2626;
-  --red-s: rgba(220,38,38,0.06);
-  --r: 12px;
+  --ink:         #1a1814;
+  --ink2:        #4a4740;
+  --ink3:        #8a8680;
+  --paper:       #f9f7f2;
+  --paper2:      #f0ede4;
+  --surface:     #ffffff;
+  --rule:        rgba(26,24,20,0.1);
+  --rule-light:  rgba(26,24,20,0.06);
+  --accent:      #2d6a4f;
+  --accent-light:#e8f4ee;
+  --accent-mid:  rgba(45,106,79,0.15);
+  --red:         #c0392b;
+  --red-light:   rgba(192,57,43,0.07);
+  --amber:       #92400e;
+  --amber-light: rgba(217,119,6,0.09);
+  --serif:       'DM Serif Display', Georgia, serif;
+  --sans:        'DM Sans', system-ui, sans-serif;
+  --nav-h:       64px;
 }
+
+/* ─────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--t1); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  font-weight: 300;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
 input, button, textarea { font-family: inherit; }
 ::selection { background: var(--accent); color: #fff; }
 
-/* ── Nav ── */
-nav { position: sticky; top: 0; z-index: 10; padding: 14px 0; background: rgba(250,250,249,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-l); }
-.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; }
-.logo { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; color: var(--t1); cursor: pointer; }
-.logo-mark { width: 32px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.55rem; color: #fff; }
-.nav-tabs { display: flex; gap: 2px; }
-.nav-tab { padding: 8px 16px; border: none; background: none; font-size: 0.85rem; font-weight: 600; color: var(--t3); cursor: pointer; border-radius: 8px; transition: all 0.12s; }
-.nav-tab:hover { color: var(--t2); background: var(--hover); }
-.nav-tab.active { color: var(--accent); background: var(--accent-s); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 99px; }
 
-/* ── Hero ── */
-.hero { padding: 100px 40px 60px; max-width: 900px; margin: 0 auto; text-align: center; }
-.hero h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.15; letter-spacing: -1px; margin-bottom: 16px; }
-.hero h1 span { color: var(--accent); }
-.hero > p { font-size: 1.05rem; color: var(--t2); line-height: 1.6; max-width: 560px; margin: 0 auto; }
-.btn-secondary { padding: 12px 28px; border: 1px solid var(--border); border-radius: 10px; background: transparent; color: var(--t1); font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-.btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-s); }
+/* ─────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  height: var(--nav-h);
+  background: rgba(249,247,242,0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 0.5px solid var(--rule);
+}
 
-/* ── Section Commons ── */
-.section { max-width: 1100px; margin: 0 auto; padding: 72px 40px; }
-.section-alt { background: var(--surface); border-top: 1px solid var(--border-l); border-bottom: 1px solid var(--border-l); }
-.section-alt .section { padding: 72px 40px; }
-.s-label { text-align: center; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 10px; }
-.s-title { text-align: center; font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 48px; }
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 3rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-/* ── Value Props (3 cards) ── */
-.vp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-.vp-card { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 28px 24px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.025); transition: box-shadow 0.2s, transform 0.2s; }
-.vp-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); transform: translateY(-3px); }
-.vp-icon { font-size: 1.6rem; margin-bottom: 14px; }
-.vp-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
-.vp-card p { font-size: 0.82rem; color: var(--t2); line-height: 1.55; }
+.logo {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  color: var(--ink);
+  cursor: pointer;
+  user-select: none;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
 
-/* ── Steps (horizontal) ── */
-.steps { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-.step { flex: 1; min-width: 160px; max-width: 200px; text-align: center; }
-.step-num { width: 36px; height: 36px; background: var(--accent); color: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; margin-bottom: 10px; }
-.step h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 4px; }
-.step p { font-size: 0.75rem; color: var(--t2); line-height: 1.5; }
+.logo span { color: var(--accent); }
 
-/* ── Stats ── */
-.stats-row { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; }
-.stat { text-align: center; }
-.stat-num { font-size: 2.4rem; font-weight: 800; color: var(--accent); line-height: 1; }
-.stat-lbl { font-size: 0.78rem; color: var(--t2); margin-top: 6px; }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
 
-/* ── Studios Grid ── */
-.studios-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-.studio-card { background: var(--bg); border: 1px solid var(--border-l); border-radius: var(--r); padding: 22px; display: flex; gap: 14px; align-items: flex-start; }
-.studio-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
-.studio-card h3 { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
-.studio-card p { font-size: 0.78rem; color: var(--t2); line-height: 1.5; }
+.nav-link {
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding-bottom: 2px;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  text-decoration: none;
+}
 
-/* ── CTA Banner ── */
-.cta-banner { text-align: center; padding: 60px 40px; }
-.cta-banner p { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
-.cta-banner .sub { font-size: 0.85rem; color: var(--t2); margin-bottom: 20px; }
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { color: var(--ink); border-bottom-color: var(--accent); }
 
-/* ── App Layout ── */
-.container { max-width: 900px; margin: 0 auto; padding: 60px 40px 80px; }
-.page { display: none; animation: fadeIn 0.25s ease; }
-.page.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-.page-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
-.page-desc { font-size: 1rem; color: var(--t2); margin-bottom: 40px; }
+/* ─────────────────────────────────────────
+   PAGE SYSTEM
+───────────────────────────────────────── */
+.page { display: none; }
+.page.active { display: block; animation: fadeUp 0.3s ease both; }
 
-/* ── Idea Form ── */
-.idea-input { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 28px; margin-bottom: 40px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); transition: border-color 0.2s, box-shadow 0.2s; }
-.idea-input:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
-.idea-title-box { background: var(--surface); border: 2px solid var(--input-border); border-radius: 10px; outline: none; font-size: 1.05rem; font-weight: 600; color: var(--t1); padding: 14px 18px; width: 100%; margin-bottom: 16px; transition: all 0.2s; }
-.idea-title-box::placeholder { color: var(--t3); font-weight: 400; }
-.idea-title-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
-.idea-title-box.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
-.form-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; transition: border-color 0.2s, box-shadow 0.2s; }
-.form-section:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
-.form-section-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--t3); margin-bottom: 10px; display: block; }
-.form-section textarea { width: 100%; background: none; border: none; outline: none; resize: vertical; font-size: 0.95rem; color: var(--t2); line-height: 1.6; min-height: 100px; }
-.form-section textarea::placeholder { color: var(--t3); }
-.idea-input-footer { display: flex; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-l); gap: 10px; flex-wrap: wrap; }
-.idea-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-right: auto; }
-.tag-btn { padding: 0 14px; height: 36px; border-radius: 8px; border: 1.5px solid var(--border); background: none; font-size: 0.72rem; font-weight: 700; color: var(--t3); cursor: pointer; transition: all 0.12s; text-transform: uppercase; letter-spacing: 0.3px; display: inline-flex; align-items: center; }
-.tag-btn:hover, .tag-btn.picked { border-color: var(--accent); color: var(--accent); background: var(--accent-s); }
-.autocomplete-wrap { position: relative; }
-.saved-by-box { background: var(--surface); border: 2px solid var(--input-border); border-radius: 8px; outline: none; font-size: 0.85rem; font-weight: 500; color: var(--t1); padding: 0 12px; width: 150px; height: 36px; transition: all 0.2s; }
-.saved-by-box::placeholder { color: var(--input-border); }
-.saved-by-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-s); }
-.saved-by-box.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
-.save-btn { padding: 0 24px; height: 36px; border: none; border-radius: 8px; background: var(--accent); color: #fff; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-.save-btn:hover { background: var(--accent-h); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(5,150,105,0.25); }
-.save-btn:active { transform: scale(0.97); box-shadow: none; }
-.autocomplete-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); z-index: 1000; display: none; max-height: 200px; overflow-y: auto; }
-.autocomplete-dropdown.show { display: block; }
-.autocomplete-item { padding: 12px 14px; cursor: pointer; font-size: 0.9rem; color: var(--t2); border-bottom: 1px solid var(--border-l); }
-.autocomplete-item:last-child { border-bottom: none; }
-.autocomplete-item:hover { background: var(--hover); color: var(--t1); font-weight: 600; }
-.ideas-count { font-size: 0.75rem; font-weight: 700; color: var(--t3); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-.idea-item { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 22px 24px; margin-bottom: 12px; transition: border-color 0.15s, box-shadow 0.15s; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-.idea-item:hover { border-color: var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-.idea-item h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; padding-right: 28px; line-height: 1.4; }
-.idea-item p { font-size: 0.9rem; color: var(--t2); line-height: 1.6; white-space: pre-wrap; }
-.idea-item-meta { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-.idea-tag { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 4px 9px; border-radius: 4px; background: var(--accent-s); color: var(--accent); }
-.idea-date { font-size: 0.7rem; color: var(--t3); }
-.idea-by { font-size: 0.75rem; font-weight: 600; color: var(--accent); background: var(--accent-light); padding: 3px 8px; border-radius: 4px; }
-.idea-del { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--t3); cursor: pointer; font-size: 0.85rem; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: all 0.12s; }
-.idea-item:hover .idea-del { opacity: 1; }
-.idea-del:hover { background: var(--red-s); color: var(--red); }
-.empty { text-align: center; padding: 60px 20px; color: var(--t3); }
-.loading { text-align: center; padding: 60px 20px; color: var(--t3); font-size: 0.95rem; }
-.product-status { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 4px 10px; border-radius: 4px; display: inline-block; }
-.ps-building { background: rgba(245,158,11,0.08); color: #b45309; }
-.about-block { background: var(--surface); border: 1px solid var(--border-l); border-radius: var(--r); padding: 32px; margin-bottom: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-.about-block p { font-size: 0.95rem; color: var(--t2); line-height: 1.7; margin-bottom: 12px; }
-.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--t1); color: #fff; padding: 12px 20px; border-radius: var(--r); font-size: 0.85rem; font-weight: 500; z-index: 100; box-shadow: 0 12px 32px rgba(0,0,0,0.15); opacity: 0; transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─────────────────────────────────────────
+   SHARED LAYOUT HELPERS
+───────────────────────────────────────── */
+.container { max-width: 900px; margin: 0 auto; padding: 0 3rem; }
+.full-bleed { margin: 0; }
+
+section { padding: 5rem 3rem; max-width: 900px; margin: 0 auto; }
+
+.section-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  font-weight: 500;
+  margin-bottom: 2.5rem;
+  display: block;
+}
+
+.section-label.green { color: var(--accent); }
+
+hr.divider {
+  border: none;
+  border-top: 0.5px solid var(--rule);
+  margin: 0 3rem;
+}
+
+/* Headings */
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-weight: 400;
+}
+h1 em { font-style: italic; color: var(--accent); }
+
+h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-weight: 400;
+}
+h2 em { font-style: italic; color: var(--accent); }
+
+h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Buttons */
+.btn-dark {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.9rem 2.5rem;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-dark:hover { background: var(--accent); transform: translateY(-1px); }
+.btn-dark:active { transform: scale(0.98); }
+
+.btn-outline {
+  display: inline-block;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.85rem 2.5rem;
+  border: 0.5px solid var(--rule);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+/* ─────────────────────────────────────────
+   ── HOME PAGE ──
+───────────────────────────────────────── */
+
+/* Hero */
+.home-hero {
+  padding: 7rem 3rem 6rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: fadeUp 0.6s ease both;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 2rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+.home-hero h1 {
+  margin-bottom: 1.75rem;
+  max-width: 760px;
+  animation: fadeUp 0.6s 0.08s ease both;
+}
+
+.hero-lead {
+  font-size: 1.1rem;
+  color: var(--ink2);
+  max-width: 540px;
+  line-height: 1.75;
+  font-weight: 300;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.6s 0.16s ease both;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  animation: fadeUp 0.6s 0.22s ease both;
+}
+
+/* Problem band */
+.problem-band {
+  background: var(--paper2);
+  border-top: 0.5px solid var(--rule);
+  border-bottom: 0.5px solid var(--rule);
+  padding: 5rem 3rem;
+}
+
+.problem-band .inner { max-width: 900px; margin: 0 auto; }
+
+.prob-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  margin-top: 3rem;
+}
+
+.prob-card { }
+
+.prob-icon-wrap {
+  width: 36px; height: 36px;
+  margin-bottom: 1rem;
+  display: flex; align-items: center;
+}
+
+.prob-card h3 { font-size: 0.95rem; font-weight: 500; color: var(--ink); margin-bottom: 0.5rem; }
+.prob-card p  { font-size: 0.85rem; color: var(--ink2); line-height: 1.65; }
+
+/* Steps band (dark) */
+.steps-band {
+  background: var(--ink);
+  padding: 5rem 3rem;
+}
+
+.steps-band .inner { max-width: 900px; margin: 0 auto; }
+.steps-band .section-label { color: rgba(249,247,242,0.35); margin-bottom: 1rem; }
+
+.steps-band h2 {
+  color: var(--paper);
+  margin-bottom: 3rem;
+  max-width: 480px;
+}
+
+.steps-band h2 em { color: rgba(249,247,242,0.45); }
+
+.step-list { display: flex; flex-direction: column; }
+
+.step-row {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 2rem;
+  padding: 2rem 0;
+  border-top: 0.5px solid rgba(249,247,242,0.1);
+  align-items: start;
+}
+
+.step-row:last-child { border-bottom: 0.5px solid rgba(249,247,242,0.1); }
+
+.step-n {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  color: rgba(249,247,242,0.2);
+  line-height: 1;
+  padding-top: 3px;
+}
+
+.step-content h3 { font-size: 1rem; font-weight: 500; color: var(--paper); margin-bottom: 0.4rem; }
+.step-content p  { font-size: 0.88rem; color: rgba(249,247,242,0.55); line-height: 1.7; max-width: 560px; }
+
+/* Studios grid */
+.studios-section { padding: 5rem 3rem; max-width: 900px; margin: 0 auto; }
+
+.studios-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 0.5px solid var(--rule);
+  margin-top: 3rem;
+}
+
+.studio-card {
+  background: var(--paper);
+  padding: 2.5rem 2rem;
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  transition: background 0.2s;
+}
+
+.studio-card:hover { background: var(--accent-light); }
+
+.studio-icon {
+  width: 38px; height: 38px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0.7;
+}
+
+.studio-card h3 { font-size: 0.92rem; font-weight: 500; margin-bottom: 0.4rem; }
+.studio-card p  { font-size: 0.82rem; color: var(--ink2); line-height: 1.55; }
+
+/* Stats */
+.stats-section { padding: 5rem 3rem; max-width: 900px; margin: 0 auto; text-align: center; }
+
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+}
+
+.stat-num {
+  font-family: var(--serif);
+  font-size: 3rem;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.stat-num span { color: var(--accent); }
+.stat-lbl { font-size: 0.78rem; color: var(--ink3); }
+
+/* CTA band */
+.cta-band {
+  background: var(--paper2);
+  border-top: 0.5px solid var(--rule);
+  padding: 6rem 3rem 7rem;
+  text-align: center;
+}
+
+.cta-band h2 { max-width: 520px; margin: 0 auto 1rem; }
+.cta-band p  { font-size: 0.95rem; color: var(--ink2); margin-bottom: 2.5rem; }
+.cta-band .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+/* ─────────────────────────────────────────
+   ── IDEAS PAGE ──
+───────────────────────────────────────── */
+.ideas-wrap { max-width: 900px; margin: 0 auto; padding: 5rem 3rem 6rem; }
+
+.ideas-header { margin-bottom: 3rem; }
+.ideas-header h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 0.75rem; }
+.ideas-header p { font-size: 0.95rem; color: var(--ink2); }
+
+/* Form */
+.idea-form {
+  background: var(--surface);
+  border: 0.5px solid var(--rule);
+  padding: 2rem;
+  margin-bottom: 3rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.idea-form:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-mid);
+}
+
+.idea-title-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 0.5px solid var(--rule);
+  outline: none;
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  color: var(--ink);
+  padding: 0 0 1rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+  font-weight: 400;
+}
+
+.idea-title-input::placeholder { color: var(--ink3); font-family: var(--sans); font-size: 1rem; font-weight: 300; }
+.idea-title-input.error { border-bottom-color: var(--red); }
+
+.idea-body-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--ink2);
+  line-height: 1.7;
+  min-height: 80px;
+  margin-bottom: 1.5rem;
+}
+
+.idea-body-input::placeholder { color: var(--ink3); }
+
+.form-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-top: 1.25rem;
+  border-top: 0.5px solid var(--rule-light);
+}
+
+.tags-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-right: auto; }
+
+.tag-btn {
+  padding: 4px 12px;
+  border: 0.5px solid var(--rule);
+  background: transparent;
+  border-radius: 2px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tag-btn:hover, .tag-btn.picked {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+/* Autocomplete */
+.ac-wrap { position: relative; }
+
+.name-input {
+  background: var(--paper2);
+  border: 0.5px solid var(--rule);
+  outline: none;
+  font-size: 0.83rem;
+  font-weight: 400;
+  color: var(--ink);
+  padding: 7px 12px;
+  width: 150px;
+  transition: all 0.15s;
+}
+
+.name-input::placeholder { color: var(--ink3); }
+.name-input:focus { border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-mid); }
+.name-input.error { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-light); }
+
+.ac-dropdown {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0; right: 0;
+  background: var(--surface);
+  border: 0.5px solid var(--rule);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.09);
+  z-index: 300;
+  display: none;
+  overflow: hidden;
+}
+
+.ac-dropdown.show { display: block; }
+.ac-item { padding: 9px 12px; font-size: 0.85rem; font-weight: 300; color: var(--ink2); cursor: pointer; border-bottom: 0.5px solid var(--rule-light); }
+.ac-item:last-child { border-bottom: none; }
+.ac-item:hover { background: var(--paper2); color: var(--ink); }
+
+/* Save button */
+.save-btn {
+  padding: 8px 20px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.save-btn:hover { background: var(--accent); transform: translateY(-1px); }
+.save-btn:active { transform: scale(0.98); }
+
+/* Ideas list */
+.ideas-meta {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 1.25rem;
+}
+
+.idea-card {
+  background: var(--surface);
+  border-top: 0.5px solid var(--rule);
+  padding: 1.75rem 0;
+  position: relative;
+  transition: background 0.15s;
+}
+
+.idea-card:last-child { border-bottom: 0.5px solid var(--rule); }
+.idea-card:hover { background: var(--paper2); }
+.idea-card:hover { padding-left: 1rem; padding-right: 1rem; margin-left: -1rem; margin-right: -1rem; }
+
+.idea-card h3 {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+  padding-right: 2rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.idea-card p { font-size: 0.88rem; color: var(--ink2); line-height: 1.65; white-space: pre-wrap; font-weight: 300; }
+
+.idea-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tag-pill {
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 2px;
+}
+
+.idea-date { font-size: 0.72rem; color: var(--ink3); }
+
+.idea-by {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.del-btn {
+  position: absolute;
+  top: 1.75rem; right: 0;
+  width: 26px; height: 26px;
+  background: none;
+  border: none;
+  color: var(--ink3);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+  border-radius: 2px;
+}
+
+.idea-card:hover .del-btn { opacity: 1; }
+.del-btn:hover { color: var(--red); background: var(--red-light); }
+
+.state-empty, .state-loading {
+  text-align: center;
+  padding: 5rem 0;
+  color: var(--ink3);
+  font-size: 0.9rem;
+  font-weight: 300;
+}
+
+/* ─────────────────────────────────────────
+   ── ABOUT PAGE ──
+───────────────────────────────────────── */
+
+/* Hero */
+.about-hero {
+  padding: 6rem 3rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-hero h1 { margin-bottom: 2rem; max-width: 760px; }
+
+/* What we do */
+.what-we-do {
+  background: var(--paper2);
+  border-top: 0.5px solid var(--rule);
+  border-bottom: 0.5px solid var(--rule);
+  padding: 5rem 3rem;
+}
+
+.what-we-do .inner { max-width: 900px; margin: 0 auto; }
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+}
+
+.pillar-num {
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  color: var(--rule);
+  line-height: 1;
+  margin-bottom: 1rem;
+  letter-spacing: -0.03em;
+}
+
+.pillar-title { font-size: 1rem; font-weight: 500; color: var(--ink); margin-bottom: 0.6rem; letter-spacing: -0.01em; }
+.pillar-body  { font-size: 0.88rem; color: var(--ink2); line-height: 1.65; }
+
+/* Before / After */
+.before-after {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  border: 0.5px solid var(--rule);
+  margin-top: 2.5rem;
+}
+
+.ba-cell { background: var(--paper); padding: 2.5rem 2rem; }
+.ba-cell.after { background: var(--accent-light); }
+
+.ba-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--ink3);
+  margin-bottom: 1.5rem;
+}
+
+.ba-cell.after .ba-label { color: var(--accent); }
+
+.ba-list { list-style: none; }
+
+.ba-list li {
+  font-size: 0.88rem;
+  color: var(--ink2);
+  line-height: 1.6;
+  padding: 0.6rem 0;
+  border-bottom: 0.5px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-weight: 300;
+}
+
+.ba-list li:last-child { border-bottom: none; }
+
+.ba-list li::before {
+  content: '×';
+  color: var(--ink3);
+  flex-shrink: 0;
+  font-size: 0.85rem;
+}
+
+.ba-cell.after .ba-list li::before {
+  content: '✓';
+  color: var(--accent);
+}
+
+/* Story */
+.story-section { padding: 5rem 3rem; max-width: 900px; margin: 0 auto; }
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.story-aside {
+  position: sticky;
+  top: calc(var(--nav-h) + 2rem);
+}
+
+.story-body p {
+  font-size: 0.95rem;
+  color: var(--ink2);
+  margin-bottom: 1.25rem;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.story-body p:last-child { margin-bottom: 0; }
+
+.pullquote {
+  border-left: 2px solid var(--accent);
+  padding: 1rem 0 1rem 1.5rem;
+  margin: 2.5rem 0;
+}
+
+.pullquote p {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: var(--ink);
+  font-style: italic;
+  margin-bottom: 0 !important;
+  font-weight: 400;
+}
+
+/* Closing CTA */
+.closing {
+  text-align: center;
+  padding: 6rem 3rem 7rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.closing h2 { max-width: 580px; margin: 0 auto 1.5rem; font-size: clamp(1.8rem, 3.5vw, 2.8rem); }
+.closing p  { font-size: 1rem; color: var(--ink2); max-width: 460px; margin: 0 auto 2.5rem; line-height: 1.7; font-weight: 300; }
+
+/* ─────────────────────────────────────────
+   ── PRODUCTS PAGE ──
+───────────────────────────────────────── */
+.products-hero { padding: 5rem 3rem 2rem; max-width: 900px; margin: 0 auto; }
+.products-hero p { font-size: 0.95rem; color: var(--ink2); max-width: 520px; line-height: 1.8; margin-top: 1rem; font-weight: 300; }
+
+.product-list { margin-top: 3rem; }
+
+.product-item {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 1.75rem 0;
+  border-top: 0.5px solid var(--rule);
+}
+
+.product-item:last-child { border-bottom: 0.5px solid var(--rule); }
+
+.product-name {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--ink);
+  min-width: 190px;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.product-desc {
+  font-size: 0.88rem;
+  color: var(--ink2);
+  line-height: 1.65;
+  flex: 1;
+  font-weight: 300;
+}
+
+.product-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.tag-flagship { background: var(--accent-light); color: var(--accent); }
+.tag-core     { background: rgba(99,102,241,0.08); color: #4338CA; }
+.tag-wip      { background: var(--amber-light); color: var(--amber); }
+
+/* ─────────────────────────────────────────
+   ── CONTACT PAGE ──
+───────────────────────────────────────── */
+.contact-hero { padding: 6rem 3rem 2rem; max-width: 900px; margin: 0 auto; }
+.contact-hero h1 { margin-bottom: 2rem; max-width: 720px; }
+
+.contact-body { padding: 4rem 3rem 8rem; max-width: 900px; margin: 0 auto; }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.contact-aside {
+  position: sticky;
+  top: calc(var(--nav-h) + 2rem);
+}
+
+.contact-email {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  display: block;
+  margin-bottom: 1rem;
+  transition: opacity 0.2s;
+}
+
+.contact-email:hover { opacity: 0.7; }
+.contact-aside p { font-size: 0.82rem; color: var(--ink3); line-height: 1.6; font-weight: 300; }
+
+.contact-faq { }
+
+.faq-item {
+  padding: 1.75rem 0;
+  border-top: 0.5px solid var(--rule);
+}
+
+.faq-item:last-child { border-bottom: 0.5px solid var(--rule); margin-bottom: 3rem; }
+
+.faq-item h3 { font-size: 0.88rem; font-weight: 500; color: var(--ink); margin-bottom: 0.4rem; }
+.faq-item p  { font-size: 0.88rem; color: var(--ink2); line-height: 1.7; font-weight: 300; }
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+footer {
+  border-top: 0.5px solid var(--rule);
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--paper);
+}
+
+.footer-logo { font-family: var(--serif); font-size: 1rem; color: var(--ink3); text-decoration: none; cursor: pointer; }
+.footer-logo span { color: var(--accent); }
+.footer-tagline { font-size: 0.78rem; color: var(--ink3); font-style: italic; font-weight: 300; }
+.footer-copy { font-size: 0.78rem; color: var(--ink3); font-weight: 300; }
+
+/* ─────────────────────────────────────────
+   TOAST
+───────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 2rem; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 11px 22px;
+  font-size: 0.83rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  z-index: 999;
+  box-shadow: 0 16px 48px rgba(26,24,20,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+}
+
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
 @media (max-width: 768px) {
-  .hero h1 { font-size: 2.2rem; }
-  .hero { padding: 72px 24px 48px; }
-  .nav-inner { padding: 0 20px; }
-  .section, .section-alt .section { padding: 48px 24px; }
-  .s-title { font-size: 1.5rem; }
-  .vp-grid { grid-template-columns: 1fr; }
+  .nav-inner { padding: 0 1.5rem; }
+  .nav-links { gap: 1.25rem; }
+  .home-hero, .about-hero, .contact-hero, .products-hero { padding-left: 1.5rem; padding-right: 1.5rem; }
+  section { padding: 3rem 1.5rem; }
+  hr.divider { margin: 0 1.5rem; }
+  .problem-band, .what-we-do, .steps-band, .cta-band { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .studios-section, .stats-section, .story-section, .contact-body, .ideas-wrap { padding-left: 1.5rem; padding-right: 1.5rem; }
+  footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  .prob-grid  { grid-template-columns: 1fr; gap: 1.75rem; }
+  .pillars    { grid-template-columns: 1fr; gap: 1.5rem; }
   .studios-grid { grid-template-columns: 1fr; }
-  .steps { flex-direction: column; align-items: center; }
-  .stats-row { gap: 32px; }
-  .container { padding: 40px 24px 60px; }
+  .before-after { grid-template-columns: 1fr; }
+  .story-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .story-aside, .contact-aside { position: static; }
+  .product-item { flex-wrap: wrap; gap: 0.5rem; }
+  .product-name { min-width: unset; width: 100%; }
+  .stats-row { gap: 2.5rem; }
+  .closing { padding: 4rem 1.5rem 5rem; }
+  .step-row { grid-template-columns: 2rem 1fr; gap: 1rem; }
+  .hero-ctas { flex-direction: column; align-items: flex-start; }
 }
+
+@media (max-width: 480px) {
+  .nav-links { gap: 1rem; }
+  .nav-link { font-size: 0.7rem; letter-spacing: 0.06em; }
+  h1 { font-size: 2.2rem; }
+}
+
 </style>
 </head>
 <body>
 
+<!-- ══════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════ -->
 <nav>
   <div class="nav-inner">
-    <div class="logo" onclick="go('home')"><span class="logo-mark">CDF</span>Cognitive Data Fabric</div>
-    <div class="nav-tabs">
-      <button class="nav-tab active" onclick="go('home')">Home</button>
-      <button class="nav-tab" onclick="go('ideas')">Ideas</button>
-      <button class="nav-tab" onclick="go('products')">Products</button>
-      <button class="nav-tab" onclick="go('about')">About Us</button>
+    <div class="logo" onclick="go('home')">Cognitive<span>Data</span></div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="go('home')">Home</button>
+      <button class="nav-link" onclick="go('ideas')">Ideas</button>
+      <button class="nav-link" onclick="go('about')">About</button>
+      <button class="nav-link" onclick="go('products')">Products</button>
+      <button class="nav-link" onclick="go('contact')">Contact</button>
     </div>
   </div>
 </nav>
 
-<!-- Home Page -->
+<!-- ══════════════════════════════════════
+     HOME PAGE
+══════════════════════════════════════ -->
 <div class="page active" id="pg-home">
 
-  <div class="hero">
-    <h1>Your AI Agents Are Lost.<br><span>We Give Them a Map.</span></h1>
-    <p>One platform to define, connect, and govern all your business context so every AI agent gives the same trusted answer.</p>
+  <!-- Hero -->
+  <div class="home-hero">
+    <div class="hero-eyebrow">Now in private beta</div>
+    <h1>Your AI agents are lost.<br><em>We give them a map.</em></h1>
+    <p class="hero-lead">One platform to define, connect, and govern all your business context so every AI agent gives the same trusted answer.</p>
+    <div class="hero-ctas">
+      <button class="btn-dark" onclick="go('ideas')">Capture an Idea</button>
+      <button class="btn-outline" onclick="go('about')">Learn More</button>
+    </div>
   </div>
 
   <!-- The Problem -->
-  <div class="section-alt">
-    <div class="section">
-      <div class="s-label">The Problem</div>
-      <div class="s-title">Three AIs. Three Answers. Zero Trust.</div>
-      <div class="vp-grid">
-        <div class="vp-card">
-          <div class="vp-icon">&#x26A0;&#xFE0F;</div>
+  <div class="problem-band">
+    <div class="inner">
+      <span class="section-label">The Problem</span>
+      <h2>Three AIs. Three answers.<br><em>Zero trust.</em></h2>
+      <div class="prob-grid">
+        <div class="prob-card">
+          <div class="prob-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M14 4L3 24h22L14 4z" stroke="#c0392b" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M14 11v6M14 19.5v1" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
           <h3>Inconsistent Answers</h3>
-          <p>Analytics says $14.2M. Sales says $16.8M. Finance says $13.9M. Same question, three numbers.</p>
+          <p>Analytics says $14.2M. Sales says $16.8M. Finance says $13.9M. Same question, three numbers, no resolution.</p>
         </div>
-        <div class="vp-card">
-          <div class="vp-icon">&#x1F9E0;</div>
+        <div class="prob-card">
+          <div class="prob-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <circle cx="14" cy="14" r="9" stroke="#92400e" stroke-width="1.5"/>
+              <path d="M14 9v5.5l3.5 2" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
           <h3>Tribal Knowledge</h3>
           <p>Critical business logic lives in people's heads, Slack threads, and spreadsheets nobody can find.</p>
         </div>
-        <div class="vp-card">
-          <div class="vp-icon">&#x23F3;</div>
+        <div class="prob-card">
+          <div class="prob-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <rect x="6" y="6" width="16" height="16" rx="2" stroke="#1d4ed8" stroke-width="1.5"/>
+              <path d="M10 14h8M14 10v8" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
           <h3>Data Team Bottleneck</h3>
-          <p>40% of time re-explaining logic. Your data team is the human API and it doesn't scale.</p>
+          <p>40% of time spent re-explaining the same logic. Your data team is a human API and it doesn't scale.</p>
         </div>
       </div>
     </div>
   </div>
 
   <!-- How It Works -->
-  <div class="section">
-    <div class="s-label">How It Works</div>
-    <div class="steps">
-      <div class="step"><div class="step-num">1</div><h4>Define</h4><p>What terms &amp; metrics mean</p></div>
-      <div class="step"><div class="step-num">2</div><h4>Remember</h4><p>Every decision &amp; why</p></div>
-      <div class="step"><div class="step-num">3</div><h4>Connect</h4><p>Knowledge graph of relationships</p></div>
-      <div class="step"><div class="step-num">4</div><h4>Serve</h4><p>Context to any AI via MCP</p></div>
-      <div class="step"><div class="step-num">5</div><h4>Compound</h4><p>Smarter with every use</p></div>
+  <div class="steps-band">
+    <div class="inner">
+      <span class="section-label">How It Works</span>
+      <h2>From scattered context<br>to <em>grounded answers.</em></h2>
+      <div class="step-list">
+        <div class="step-row">
+          <div class="step-n">1</div>
+          <div class="step-content">
+            <h3>Define</h3>
+            <p>Establish what every term and metric means across your organisation. One definition, everywhere, for good.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-n">2</div>
+          <div class="step-content">
+            <h3>Remember</h3>
+            <p>Capture every decision and the reasoning behind it. Your business logic stops living in people's heads.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-n">3</div>
+          <div class="step-content">
+            <h3>Connect</h3>
+            <p>Build a living knowledge graph of how your data, metrics, and decisions relate to each other.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-n">4</div>
+          <div class="step-content">
+            <h3>Serve</h3>
+            <p>Deliver verified context to any AI agent via MCP. Every tool, every query, grounded in the same truth.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-n">5</div>
+          <div class="step-content">
+            <h3>Compound</h3>
+            <p>The fabric grows smarter with every use. The longer you run it, the wider the competitive moat becomes.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Studios -->
-  <div class="section-alt">
-    <div class="section">
-      <div class="s-label">What Ships Today</div>
-      <div class="s-title">Four Studios. Complete Stack.</div>
-      <div class="studios-grid">
-        <div class="studio-card"><div class="studio-icon">&#x1F9E9;</div><div><h3>Context Studio</h3><p>Visual graph modeler. Auto PK/FK detection. Master Node grouping.</p></div></div>
-        <div class="studio-card"><div class="studio-icon">&#x1F4CF;</div><div><h3>Metric Studio</h3><p>6 metric types. AI suggestions. DAG resolver. Query preview.</p></div></div>
-        <div class="studio-card"><div class="studio-icon">&#x1F4D6;</div><div><h3>Business Glossary</h3><p>One definition per term. Impact analysis. Bidirectional lineage.</p></div></div>
-        <div class="studio-card"><div class="studio-icon">&#x1F4DC;</div><div><h3>Decision History</h3><p>WHY, WHO, WHEN for every change. Auto-injected into AI prompts.</p></div></div>
+  <div class="studios-section">
+    <span class="section-label">What Ships Today</span>
+    <h2>Four studios.<br><em>Complete stack.</em></h2>
+    <div class="studios-grid">
+      <div class="studio-card">
+        <div class="studio-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect x="4" y="4" width="9" height="9" rx="1.5" stroke="#2d6a4f" stroke-width="1.5"/>
+            <rect x="15" y="4" width="9" height="9" rx="1.5" stroke="#2d6a4f" stroke-width="1.5"/>
+            <rect x="4" y="15" width="9" height="9" rx="1.5" stroke="#2d6a4f" stroke-width="1.5"/>
+            <rect x="15" y="15" width="9" height="9" rx="1.5" stroke="#2d6a4f" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Context Studio</h3>
+          <p>Visual graph modeler. Auto PK/FK detection. Master Node grouping for your entire data model.</p>
+        </div>
+      </div>
+      <div class="studio-card">
+        <div class="studio-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M5 20l5-10 5 7 3-4 5 7" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Metric Studio</h3>
+          <p>6 metric types. AI suggestions. DAG resolver with query preview before you commit.</p>
+        </div>
+      </div>
+      <div class="studio-card">
+        <div class="studio-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect x="5" y="5" width="18" height="18" rx="2" stroke="#2d6a4f" stroke-width="1.5"/>
+            <path d="M9 11h10M9 15h7" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Business Glossary</h3>
+          <p>One definition per term. Impact analysis. Bidirectional lineage across every system.</p>
+        </div>
+      </div>
+      <div class="studio-card">
+        <div class="studio-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="9" stroke="#2d6a4f" stroke-width="1.5"/>
+            <path d="M14 9v5l3 3" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <h3>Decision History</h3>
+          <p>WHY, WHO, WHEN for every change. Auto-injected into AI prompts so context is never lost.</p>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Stats -->
-  <div class="section">
-    <div class="s-label">Compounding Returns</div>
-    <div class="s-title">The Longer You Use It, the Wider the Moat.</div>
+  <div class="stats-section">
+    <span class="section-label">Compounding Returns</span>
+    <h2>The longer you use it,<br>the wider the moat.</h2>
     <div class="stats-row">
-      <div class="stat"><div class="stat-num">15K+</div><div class="stat-lbl">Decisions captured</div></div>
-      <div class="stat"><div class="stat-num">3K+</div><div class="stat-lbl">Terms governed</div></div>
-      <div class="stat"><div class="stat-num">500+</div><div class="stat-lbl">Models onboarded</div></div>
-      <div class="stat"><div class="stat-num">40%</div><div class="stat-lbl">Less re-explaining</div></div>
+      <div class="stat">
+        <div class="stat-num">15<span>K+</span></div>
+        <div class="stat-lbl">Decisions captured</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3<span>K+</span></div>
+        <div class="stat-lbl">Terms governed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">500<span>+</span></div>
+        <div class="stat-lbl">Models onboarded</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">40<span>%</span></div>
+        <div class="stat-lbl">Less re-explaining</div>
+      </div>
     </div>
   </div>
 
   <!-- CTA -->
-  <div class="section-alt">
-    <div class="cta-banner">
-      <p>Ready to give your AI agents real context?</p>
-      <div class="sub">One platform. Every definition. Total trust.</div>
-      <button class="btn-secondary" onclick="go('about')">Learn More</button>
+  <div class="cta-band">
+    <h2>Ready to give your AI agents real context?</h2>
+    <p>One platform. Every definition. Total trust.</p>
+    <div class="cta-btns">
+      <button class="btn-dark" onclick="go('ideas')">Start Capturing Ideas</button>
+      <button class="btn-outline" onclick="go('about')">About Us</button>
     </div>
   </div>
 
 </div>
 
-<!-- Ideas / Products / About Pages -->
-<div class="container">
-  <div class="page" id="pg-ideas">
-    <h1 class="page-title">Ideas</h1>
-    <p class="page-desc">Drop it before you forget it.</p>
-    <div class="idea-input">
-      <input type="text" id="iTitle" class="idea-title-box" placeholder="What's the idea?">
-      <div class="form-section">
-        <label class="form-section-label">Describe it</label>
-        <textarea id="iBody" placeholder="Why does it matter? What's the impact? Add context..."></textarea>
-      </div>
-      <div class="idea-input-footer">
-        <div class="idea-tags">
-          <button class="tag-btn picked" data-t="general" onclick="pickTag(this)">General</button>
-          <button class="tag-btn" data-t="feature" onclick="pickTag(this)">Feature</button>
-          <button class="tag-btn" data-t="design" onclick="pickTag(this)">Design</button>
-          <button class="tag-btn" data-t="fix" onclick="pickTag(this)">Fix</button>
-          <button class="tag-btn" data-t="growth" onclick="pickTag(this)">Growth</button>
+<!-- ══════════════════════════════════════
+     IDEAS PAGE
+══════════════════════════════════════ -->
+<div class="page" id="pg-ideas">
+  <div class="ideas-wrap">
+
+    <div class="ideas-header">
+      <h1>Ideas</h1>
+      <p>Drop it before you forget it. Press Ctrl+Enter to save fast.</p>
+    </div>
+
+    <div class="idea-form">
+      <input type="text" id="iTitle" class="idea-title-input" placeholder="What's the idea?">
+      <textarea id="iBody" class="idea-body-input" placeholder="Why does it matter? What's the impact? Add any context..."></textarea>
+      <div class="form-footer">
+        <div class="tags-row">
+          <button class="tag-btn picked" data-t="general"  onclick="pickTag(this)">General</button>
+          <button class="tag-btn"        data-t="feature"  onclick="pickTag(this)">Feature</button>
+          <button class="tag-btn"        data-t="design"   onclick="pickTag(this)">Design</button>
+          <button class="tag-btn"        data-t="fix"      onclick="pickTag(this)">Fix</button>
+          <button class="tag-btn"        data-t="growth"   onclick="pickTag(this)">Growth</button>
         </div>
-        <div class="autocomplete-wrap">
-          <input type="text" id="iSavedBy" class="saved-by-box" placeholder="Your name *" required>
-          <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
+        <div class="ac-wrap">
+          <input type="text" id="iSavedBy" class="name-input" placeholder="Your name *" required>
+          <div class="ac-dropdown" id="acDropdown"></div>
         </div>
         <button class="save-btn" onclick="saveIdea()">Save</button>
       </div>
     </div>
-    <div class="ideas-count" id="ideasCount"></div>
-    <div id="ideasList"><div class="loading">Loading ideas...</div></div>
-  </div>
 
-  <div class="page" id="pg-products">
-    <h1 class="page-title">Products</h1>
-    <p class="page-desc">What's in motion.</p>
-    <div class="about-block" style="text-align: center; padding: 60px 32px;">
-      <span class="product-status ps-building" style="font-size: 1rem; padding: 10px 24px;">In Progress</span>
-      <p style="margin-top: 20px; color: var(--t2);">We're building something great. Check back soon.</p>
+    <div class="ideas-meta" id="ideasCount"></div>
+    <div id="ideasList">
+      <div class="state-loading">Loading ideas...</div>
     </div>
-  </div>
 
-  <div class="page" id="pg-about">
   </div>
 </div>
 
+<!-- ══════════════════════════════════════
+     ABOUT PAGE
+══════════════════════════════════════ -->
+<div class="page" id="pg-about">
+
+  <!-- Hero -->
+  <div class="about-hero">
+    <div class="hero-eyebrow">About Splinth AI</div>
+    <h1>Your data knows more than<br>it's been allowed to <em>say.</em></h1>
+    <p class="hero-lead">We build tools that help businesses of every size stop staring at numbers and start understanding what they mean. No jargon. No data team required. Just clear answers and confident next steps.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- What we do -->
+  <div class="what-we-do">
+    <div class="inner">
+      <span class="section-label">What we do</span>
+      <div class="pillars">
+        <div>
+          <div class="pillar-num">01</div>
+          <div class="pillar-title">We translate your data</div>
+          <p class="pillar-body">Your systems generate thousands of signals every day. We connect them, read them, and give you the plain-language story behind your numbers.</p>
+        </div>
+        <div>
+          <div class="pillar-num">02</div>
+          <div class="pillar-title">We surface the why</div>
+          <p class="pillar-body">Most tools show you what happened. We go further, finding the root cause hiding inside your processes, so you know exactly where to act.</p>
+        </div>
+        <div>
+          <div class="pillar-num">03</div>
+          <div class="pillar-title">We help you decide faster</div>
+          <p class="pillar-body">From "what happened?" to "here's what to fix" in one step. No diagnosis loops. No guesswork. Just a clear path forward for your business.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Before / After -->
+  <section>
+    <span class="section-label">The difference it makes</span>
+    <h2>From staring at numbers<br>to <em>understanding them.</em></h2>
+    <div class="before-after">
+      <div class="ba-cell">
+        <div class="ba-label">Without Splinth AI</div>
+        <ul class="ba-list">
+          <li>Sales dropped, but nobody knows why</li>
+          <li>Three teams, three different versions of the truth</li>
+          <li>Answers take days, sometimes weeks</li>
+          <li>Key knowledge lives in one person's head</li>
+          <li>AI tools give confident answers nobody can verify</li>
+        </ul>
+      </div>
+      <div class="ba-cell after">
+        <div class="ba-label">With Splinth AI</div>
+        <ul class="ba-list">
+          <li>Ask why and get a clear, ranked explanation instantly</li>
+          <li>One shared definition of every metric, everywhere</li>
+          <li>Answers in seconds, backed by real evidence</li>
+          <li>Knowledge is captured, searchable, and permanent</li>
+          <li>AI that shows its reasoning, every single time</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Story -->
+  <div class="story-section">
+    <div class="story-grid">
+      <div class="story-aside">
+        <h2>Built for the people who <em>run</em> things, not just the ones who read reports.</h2>
+      </div>
+      <div class="story-body">
+        <p>Big companies spend millions on data teams to figure out why sales dipped, why customers left, or where their operations are leaking money. Everyone else has been left to guess.</p>
+        <div class="pullquote">
+          <p>"Stop diagnosing. Start deciding."</p>
+        </div>
+        <p>We started Splinth AI because that gap shouldn't exist. Every business owner, whether they run a 5-person shop or a 500-person operation, deserves to understand what's really driving their results.</p>
+        <p>Our products are built around one idea: context is everything. Raw data without context is noise. With context, it becomes a map that shows you where you are, what's slowing you down, and what to do next.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="background: var(--paper2); border-top: 0.5px solid var(--rule);">
+    <div class="closing">
+      <h2>Ready to hear what your business has been trying to tell you?</h2>
+      <p>Let's show you what Splinth AI can surface. No setup, no data team, no jargon.</p>
+      <button class="btn-dark" onclick="go('contact')">Get in Touch</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     PRODUCTS PAGE
+══════════════════════════════════════ -->
+<div class="page" id="pg-products">
+
+  <div class="products-hero">
+    <span class="section-label">Our Products</span>
+    <h2>Tools built for<br><em>clarity, not complexity.</em></h2>
+    <p>Every product we build starts from the same question: what does this person actually need to know, and what's the clearest way to show them?</p>
+  </div>
+
+  <hr class="divider" style="margin-top: 1rem;">
+
+  <section style="padding-top: 3rem;">
+    <div class="product-list">
+      <div class="product-item">
+        <div class="product-name">Context Engine</div>
+        <div class="product-desc">The intelligent layer that reads across all your business data and builds a living map of how everything connects: customers, operations, revenue, and risk.</div>
+        <span class="product-tag tag-flagship">Flagship</span>
+      </div>
+      <div class="product-item">
+        <div class="product-name">Semantic Fabric</div>
+        <div class="product-desc">Turns scattered data signals into clear business meaning. Ask it anything about your business in plain English. It finds the answer and tells you what to do about it.</div>
+        <span class="product-tag tag-core">Core</span>
+      </div>
+      <div class="product-item">
+        <div class="product-name">More coming</div>
+        <div class="product-desc">We're building a suite of focused tools, each designed to give a specific kind of clarity to a specific kind of decision. Watch this space.</div>
+        <span class="product-tag tag-wip">In Build</span>
+      </div>
+    </div>
+  </section>
+
+  <div style="background: var(--paper2); border-top: 0.5px solid var(--rule);">
+    <div class="closing">
+      <h2>Want to see these in action?</h2>
+      <p>We'll walk you through what each product does and which one fits your business best.</p>
+      <button class="btn-dark" onclick="go('contact')">Get in Touch</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     CONTACT PAGE
+══════════════════════════════════════ -->
+<div class="page" id="pg-contact">
+
+  <div class="contact-hero">
+    <div class="hero-eyebrow">Get in touch</div>
+    <h1>Let's talk about what your<br>business has been trying to <em>tell you.</em></h1>
+    <p class="hero-lead">We'd love to hear from you. Whether you're curious about what Splinth AI can do for your business, want a walkthrough of our products, or just have a question — drop us a line and we'll get back to you promptly.</p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="contact-body">
+    <div class="contact-grid">
+
+      <div class="contact-aside">
+        <span class="section-label">Email us</span>
+        <a href="mailto:contactus@splinthai.com" class="contact-email">contactus@splinthai.com</a>
+        <p>No sales scripts. No runaround.<br>Just a real conversation.</p>
+      </div>
+
+      <div class="contact-faq">
+        <div class="faq-item">
+          <h3>Not sure where to start?</h3>
+          <p>That's completely fine. Tell us what's frustrating you about your data right now and we'll point you in the right direction. No pitch, no pressure.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Have a question about the products?</h3>
+          <p>We're happy to walk you through what each product does and which one fits your business best.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Just curious?</h3>
+          <p>That's a perfectly good reason to get in touch too. If you've ever sat in a meeting wishing someone could explain why the numbers look the way they do, we built this for you.</p>
+        </div>
+        <a href="mailto:contactus@splinthai.com" class="btn-dark">Send us an email</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <span class="footer-logo" onclick="go('home')">Cognitive<span>Data</span>.ai</span>
+  <div class="footer-tagline">Stop diagnosing. Start deciding.</div>
+  <div class="footer-copy">© 2026 Splinth AI. All rights reserved.</div>
+</footer>
+
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
 <script>
-/* -- Supabase (injected at build time) -- */
 const SUPABASE_URL = '__SUPABASE_URL__';
 const SUPABASE_KEY = '__SUPABASE_KEY__';
 let sbClient = null;
-try {
-  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-} catch (e) {
-  console.warn('Supabase not configured:', e.message);
-}
+try { sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }
+catch (e) { console.warn('Supabase not configured:', e.message); }
 
 let currentTag = 'general';
-const VALID_PAGES = ['home', 'ideas', 'products', 'about'];
+const PAGES = ['home', 'ideas', 'about', 'products', 'contact'];
 
-/* -- Name Autocomplete -- */
-function loadSavedNames() {
-  const saved = localStorage.getItem('ideaVoltNames');
-  return saved ? JSON.parse(saved) : [];
+/* ── Autocomplete ── */
+function getSavedNames() {
+  try { return JSON.parse(localStorage.getItem('ideaVoltNames') || '[]'); } catch { return []; }
 }
-
-function saveNameToStorage(name) {
-  if (!name.trim()) return;
-  const names = loadSavedNames();
-  if (!names.includes(name)) {
-    names.push(name);
-    localStorage.setItem('ideaVoltNames', JSON.stringify(names));
-  }
+function storeName(n) {
+  if (!n.trim()) return;
+  const names = getSavedNames();
+  if (!names.includes(n)) { names.push(n); localStorage.setItem('ideaVoltNames', JSON.stringify(names)); }
 }
-
-function showAutocomplete(value) {
-  const dropdown = document.getElementById('autocompleteDropdown');
-  if (value.trim()) document.getElementById('iSavedBy').classList.remove('error');
-  if (!value.trim()) { dropdown.classList.remove('show'); return; }
-  const filtered = loadSavedNames().filter(n => n.toLowerCase().startsWith(value.toLowerCase()));
-  if (!filtered.length) { dropdown.classList.remove('show'); return; }
-  dropdown.innerHTML = filtered.map(n => '<div class="autocomplete-item" onclick="selectName(\'' + esc(n) + '\')">' + esc(n) + '</div>').join('');
-  dropdown.classList.add('show');
+function showAC(val) {
+  const dd = document.getElementById('acDropdown');
+  if (val.trim()) document.getElementById('iSavedBy').classList.remove('error');
+  if (!val.trim()) { dd.classList.remove('show'); return; }
+  const matches = getSavedNames().filter(n => n.toLowerCase().startsWith(val.toLowerCase()));
+  if (!matches.length) { dd.classList.remove('show'); return; }
+  dd.innerHTML = matches.map(n => '<div class="ac-item" onclick="pickName(\'' + esc(n) + '\')">' + esc(n) + '</div>').join('');
+  dd.classList.add('show');
 }
-
-function selectName(name) {
+function pickName(name) {
   document.getElementById('iSavedBy').value = name;
-  document.getElementById('autocompleteDropdown').classList.remove('show');
+  document.getElementById('acDropdown').classList.remove('show');
 }
 
-/* -- CRUD -- */
+/* ── CRUD ── */
 async function loadIdeas() {
   if (!sbClient) return [];
   try {
     const { data, error } = await sbClient.from('ideas').select('*').order('created_at', { ascending: false });
     if (error) throw error;
     return data || [];
-  } catch (e) { console.error('Load error:', e); return []; }
+  } catch (e) { console.error(e); return []; }
 }
 
 async function saveIdea() {
-  const title = document.getElementById('iTitle').value.trim();
-  const body = document.getElementById('iBody').value.trim();
-  const savedBy = document.getElementById('iSavedBy').value.trim();
   const titleEl = document.getElementById('iTitle');
-  const nameEl = document.getElementById('iSavedBy');
-  titleEl.classList.remove('error');
-  nameEl.classList.remove('error');
-  if (!title) { titleEl.classList.add('error'); notify('Give your idea a title'); titleEl.focus(); return; }
-  if (!savedBy) { nameEl.classList.add('error'); notify('Please enter your name'); nameEl.focus(); return; }
+  const nameEl  = document.getElementById('iSavedBy');
+  const title   = titleEl.value.trim();
+  const body    = document.getElementById('iBody').value.trim();
+  const savedBy = nameEl.value.trim();
+  titleEl.classList.remove('error'); nameEl.classList.remove('error');
+  if (!title)   { titleEl.classList.add('error'); notify('Give your idea a title'); titleEl.focus(); return; }
+  if (!savedBy) { nameEl.classList.add('error');  notify('Please enter your name'); nameEl.focus(); return; }
   if (!sbClient) { notify('Database not configured'); return; }
   try {
-    saveNameToStorage(savedBy);
+    storeName(savedBy);
     const { error } = await sbClient.from('ideas').insert({ title, body, tag: currentTag, saved_by: savedBy });
     if (error) throw error;
-    titleEl.value = '';
-    document.getElementById('iBody').value = '';
-    nameEl.value = '';
+    titleEl.value = ''; document.getElementById('iBody').value = ''; nameEl.value = '';
     await render();
-    notify('Saved');
-  } catch (e) { console.error('Save error:', e); notify('Failed to save'); }
+    notify('Idea saved');
+  } catch (e) { console.error(e); notify('Failed to save'); }
 }
 
 async function delIdea(id) {
@@ -387,62 +1472,78 @@ async function delIdea(id) {
     if (error) throw error;
     await render();
     notify('Deleted');
-  } catch (e) { console.error('Delete error:', e); notify('Failed to delete'); }
+  } catch (e) { console.error(e); notify('Failed to delete'); }
 }
 
-/* -- Navigation -- */
-function go(pg) {
-  window.location.hash = pg;
-}
+/* ── Navigation ── */
+function go(pg) { window.location.hash = pg; }
 
 function handleHash() {
   var hash = window.location.hash.slice(1) || 'home';
-  if (VALID_PAGES.indexOf(hash) === -1) hash = 'home';
-  document.querySelectorAll('.page').forEach(function(el) { el.classList.remove('active'); });
-  document.querySelectorAll('.nav-tab').forEach(function(el) { el.classList.remove('active'); });
+  if (!PAGES.includes(hash)) hash = 'home';
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
   document.getElementById('pg-' + hash).classList.add('active');
-  document.querySelectorAll('.nav-tab')[VALID_PAGES.indexOf(hash)].classList.add('active');
+  document.querySelectorAll('.nav-link')[PAGES.indexOf(hash)].classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function pickTag(btn) {
-  document.querySelectorAll('.tag-btn').forEach(function(el) { el.classList.remove('picked'); });
+  document.querySelectorAll('.tag-btn').forEach(el => el.classList.remove('picked'));
   btn.classList.add('picked');
   currentTag = btn.dataset.t;
 }
 
-/* -- Rendering -- */
+/* ── Render ideas ── */
 async function render() {
   const ideas = await loadIdeas();
-  document.getElementById('ideasCount').textContent = ideas.length + ' idea' + (ideas.length !== 1 ? 's' : '');
+  const countEl = document.getElementById('ideasCount');
+  const listEl  = document.getElementById('ideasList');
+  if (countEl) countEl.textContent = ideas.length + ' idea' + (ideas.length !== 1 ? 's' : '');
   if (!ideas.length) {
-    document.getElementById('ideasList').innerHTML = '<div class="empty">No ideas yet. Type one above and hit Save.</div>';
+    listEl.innerHTML = '<div class="state-empty">No ideas yet. Type one above and hit Save.</div>';
     return;
   }
-  document.getElementById('ideasList').innerHTML = ideas.map(function(i) {
-    return '<div class="idea-item"><button class="idea-del" onclick="delIdea(' + i.id + ')" title="Delete">&#x2715;</button><h3>' + esc(i.title) + '</h3>' + (i.body ? '<p>' + esc(i.body) + '</p>' : '') + '<div class="idea-item-meta"><span class="idea-tag">' + esc(i.tag || 'general') + '</span><span class="idea-date">' + fmtD(i.created_at) + '</span>' + (i.saved_by ? '<span class="idea-by">by ' + esc(i.saved_by) + '</span>' : '') + '</div></div>';
-  }).join('');
+  listEl.innerHTML = ideas.map(i =>
+    '<div class="idea-card">' +
+    '<button class="del-btn" onclick="delIdea(' + i.id + ')" title="Delete">' +
+    '<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1 1l9 9M10 1l-9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+    '</button>' +
+    '<h3>' + esc(i.title) + '</h3>' +
+    (i.body ? '<p>' + esc(i.body) + '</p>' : '') +
+    '<div class="idea-card-meta">' +
+    '<span class="tag-pill">' + esc(i.tag || 'general') + '</span>' +
+    '<span class="idea-date">' + fmtD(i.created_at) + '</span>' +
+    (i.saved_by ? '<span class="idea-by">by ' + esc(i.saved_by) + '</span>' : '') +
+    '</div></div>'
+  ).join('');
 }
 
-/* -- Utilities -- */
+/* ── Utilities ── */
 function esc(s) { if (!s) return ''; var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 function fmtD(d) { return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
-function notify(msg) { var t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function() { t.classList.remove('show'); }, 2200); }
+function notify(msg) {
+  var t = document.getElementById('toast'); t.textContent = msg;
+  t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2400);
+}
 
-/* -- Init -- */
+/* ── Init ── */
 handleHash();
 window.addEventListener('hashchange', handleHash);
 render();
 
 document.addEventListener('DOMContentLoaded', function() {
-  var input = document.getElementById('iSavedBy');
-  if (input) {
-    input.addEventListener('input', function(e) { showAutocomplete(e.target.value); });
-    input.addEventListener('blur', function() { setTimeout(function() { document.getElementById('autocompleteDropdown').classList.remove('show'); }, 200); });
+  var inp = document.getElementById('iSavedBy');
+  if (inp) {
+    inp.addEventListener('input', e => showAC(e.target.value));
+    inp.addEventListener('blur', () => setTimeout(() => document.getElementById('acDropdown').classList.remove('show'), 200));
   }
 });
 
 document.addEventListener('keydown', function(e) {
-  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && document.querySelector('.page.active').id === 'pg-ideas') saveIdea();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    if (document.querySelector('.page.active') && document.querySelector('.page.active').id === 'pg-ideas') saveIdea();
+  }
 });
 </script>
 </body>
