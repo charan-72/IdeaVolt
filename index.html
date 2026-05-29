@@ -218,9 +218,7 @@ h3 {
 }
 .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
 
-/* ─────────────────────────────────────────
-   ── HOME PAGE ──
-───────────────────────────────────────── */
+
 
 /* Hero */
 .home-hero {
@@ -944,6 +942,235 @@ footer {
   h1 { font-size: 2.2rem; }
 }
 
+
+  /* ── Discover page sections ── */
+  .discover-hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 3rem 5rem;
+    max-width: 900px;
+    margin: 0 auto;
+    border-bottom: 0.5px solid var(--rule);
+  }
+
+  .discover-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 6vw, 4.8rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    max-width: 780px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .discover-hero h1 em { font-style: italic; color: var(--accent); }
+
+  .d-problem {
+    padding: 6rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+    border-bottom: 0.5px solid var(--rule);
+  }
+
+  .d-problem .big-line {
+    font-family: var(--serif);
+    font-size: clamp(1.9rem, 3.8vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 700px;
+    margin-bottom: 1.5rem;
+  }
+
+  .d-problem .big-line em { font-style: italic; color: var(--accent); }
+
+  .d-problem p {
+    font-size: 1rem;
+    color: var(--ink2);
+    max-width: 520px;
+    line-height: 1.85;
+  }
+
+  .d-vision {
+    background: var(--paper2);
+    padding: 6rem 3rem;
+  }
+
+  .d-vision .inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.8fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .d-vision-aside {
+    position: sticky;
+    top: 5rem;
+  }
+
+  .d-vision-aside .big-line {
+    font-family: var(--serif);
+    font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .d-vision-aside .big-line em { font-style: italic; color: var(--accent); }
+
+  .d-vision-body p {
+    font-size: 0.95rem;
+    color: var(--ink2);
+    line-height: 1.85;
+    margin-bottom: 1.25rem;
+  }
+
+  .d-vision-body p:last-child { margin-bottom: 0; }
+
+  .d-what {
+    padding: 6rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+    border-bottom: 0.5px solid var(--rule);
+  }
+
+  .d-what .big-line {
+    font-family: var(--serif);
+    font-size: clamp(1.9rem, 3.8vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 700px;
+    margin-bottom: 1.5rem;
+  }
+
+  .d-what .big-line em { font-style: italic; color: var(--accent); }
+
+  .d-what .intro {
+    font-size: 1rem;
+    color: var(--ink2);
+    max-width: 520px;
+    line-height: 1.85;
+    margin-bottom: 3rem;
+  }
+
+  .d-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    border-top: 0.5px solid var(--rule);
+    padding-top: 2.5rem;
+  }
+
+  .d-pillar-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-light);
+    padding: 4px 14px 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 0.9rem;
+  }
+
+  .d-pillar-body {
+    font-size: 0.88rem;
+    color: var(--ink2);
+    line-height: 1.7;
+  }
+
+  .d-difference {
+    background: var(--paper2);
+    padding: 6rem 3rem;
+  }
+
+  .d-difference .inner { max-width: 900px; margin: 0 auto; }
+
+  .d-difference .big-line {
+    font-family: var(--serif);
+    font-size: clamp(1.9rem, 3.8vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 680px;
+    margin-bottom: 1.5rem;
+  }
+
+  .d-difference .big-line em { font-style: italic; color: var(--accent); }
+
+  .d-difference .intro {
+    font-size: 1rem;
+    color: var(--ink2);
+    max-width: 520px;
+    line-height: 1.85;
+    margin-bottom: 2.5rem;
+  }
+
+  .d-quote-band {
+    background: var(--ink);
+    padding: 5.5rem 3rem;
+    text-align: center;
+  }
+
+  .d-quote-band blockquote {
+    font-family: var(--serif);
+    font-size: clamp(1.9rem, 3.8vw, 3rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    max-width: 640px;
+    margin: 0 auto 1rem;
+    font-style: italic;
+  }
+
+  .d-quote-band cite {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(249,247,242,0.3);
+    font-style: normal;
+  }
+
+  .d-closing {
+    padding: 7rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .d-closing h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 540px;
+    margin: 0 auto 1.25rem;
+  }
+
+  .d-closing h2 em { font-style: italic; color: var(--accent); }
+
+  .d-closing p {
+    font-size: 1rem;
+    color: var(--ink2);
+    max-width: 400px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.75;
+  }
+
+  @media (max-width: 680px) {
+    .discover-hero, .d-problem, .d-what, .d-closing { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .d-vision, .d-difference, .d-quote-band { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .d-vision .inner { grid-template-columns: 1fr; gap: 2rem; }
+    .d-vision-aside { position: static; }
+    .d-pillars { grid-template-columns: 1fr; gap: 2rem; }
+  }
 </style>
 </head>
 <body>
@@ -953,10 +1180,9 @@ footer {
 ══════════════════════════════════════ -->
 <nav>
   <div class="nav-inner">
-    <div class="logo" onclick="go('home')">splinth<span>ai</span></div>
+    <div class="logo" onclick="go('discover')">splinth<span>ai</span></div>
     <div class="nav-links">
-      <button class="nav-link active" onclick="go('home')">Home</button>
-      <button class="nav-link" onclick="go('about')">About</button>
+      <button class="nav-link active" onclick="go('discover')">Discover</button>
       <button class="nav-link" onclick="go('how')">How It Works</button>
       <button class="nav-link" onclick="go('products')">Products</button>
       <button class="nav-link" onclick="go('contact')">Contact</button>
@@ -965,248 +1191,104 @@ footer {
 </nav>
 
 <!-- ══════════════════════════════════════
-     HOME PAGE
-══════════════════════════════════════ -->
-<div class="page active" id="pg-home">
-
-  <!-- Hero -->
-  <div class="home-hero">
-    <div class="hero-eyebrow">Now in private beta</div>
-    <h1>Your AI agents are lost.<br><em>We give them a map.</em></h1>
-    <p class="hero-lead">One platform to define, connect, and govern all your business context so every AI agent gives the same trusted answer.</p>
-    <div class="hero-ctas">
-      <button class="btn-dark" onclick="go('about')">Learn More</button>
-      <button class="btn-outline" onclick="go('contact')">Get in Touch</button>
-    </div>
-  </div>
-
-  <!-- The Problem -->
-  <div class="problem-band">
-    <div class="inner">
-      <span class="section-label">The Problem</span>
-      <h2>Three AIs. Three answers.<br><em>Zero trust.</em></h2>
-      <div class="prob-grid">
-        <div class="prob-card">
-          <div class="prob-icon-wrap">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <path d="M14 4L3 24h22L14 4z" stroke="#c0392b" stroke-width="1.5" stroke-linejoin="round"/>
-              <path d="M14 11v6M14 19.5v1" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <h3>Inconsistent Answers</h3>
-          <p>Analytics says $14.2M. Sales says $16.8M. Finance says $13.9M. Same question, three numbers, no resolution.</p>
-        </div>
-        <div class="prob-card">
-          <div class="prob-icon-wrap">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <circle cx="14" cy="14" r="9" stroke="#92400e" stroke-width="1.5"/>
-              <path d="M14 9v5.5l3.5 2" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h3>Tribal Knowledge</h3>
-          <p>Critical business logic lives in people's heads, Slack threads, and spreadsheets nobody can find.</p>
-        </div>
-        <div class="prob-card">
-          <div class="prob-icon-wrap">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <rect x="6" y="6" width="16" height="16" rx="2" stroke="#1d4ed8" stroke-width="1.5"/>
-              <path d="M10 14h8M14 10v8" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <h3>Data Team Bottleneck</h3>
-          <p>40% of time spent re-explaining the same logic. Your data team is a human API and it doesn't scale.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Studios -->
-  <div class="studios-section">
-    <span class="section-label">What Ships Today</span>
-    <h2>Four studios.<br><em>Complete stack.</em></h2>
-    <div class="studios-grid">
-      <div class="studio-card">
-        <div class="studio-icon">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <rect x="4" y="4" width="9" height="9" rx="1.5" stroke="#2d6a4f" stroke-width="1.5"/>
-            <rect x="15" y="4" width="9" height="9" rx="1.5" stroke="#2d6a4f" stroke-width="1.5"/>
-            <rect x="4" y="15" width="9" height="9" rx="1.5" stroke="#2d6a4f" stroke-width="1.5"/>
-            <rect x="15" y="15" width="9" height="9" rx="1.5" stroke="#2d6a4f" stroke-width="1.5"/>
-          </svg>
-        </div>
-        <div>
-          <h3>Context Studio</h3>
-          <p>Visual graph modeler. Auto PK/FK detection. Master Node grouping for your entire data model.</p>
-        </div>
-      </div>
-      <div class="studio-card">
-        <div class="studio-icon">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <path d="M5 20l5-10 5 7 3-4 5 7" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div>
-          <h3>Metric Studio</h3>
-          <p>6 metric types. AI suggestions. DAG resolver with query preview before you commit.</p>
-        </div>
-      </div>
-      <div class="studio-card">
-        <div class="studio-icon">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <rect x="5" y="5" width="18" height="18" rx="2" stroke="#2d6a4f" stroke-width="1.5"/>
-            <path d="M9 11h10M9 15h7" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div>
-          <h3>Business Glossary</h3>
-          <p>One definition per term. Impact analysis. Bidirectional lineage across every system.</p>
-        </div>
-      </div>
-      <div class="studio-card">
-        <div class="studio-icon">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <circle cx="14" cy="14" r="9" stroke="#2d6a4f" stroke-width="1.5"/>
-            <path d="M14 9v5l3 3" stroke="#2d6a4f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div>
-          <h3>Decision History</h3>
-          <p>WHY, WHO, WHEN for every change. Auto-injected into AI prompts so context is never lost.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Stats -->
-  <div class="stats-section">
-    <span class="section-label">Compounding Returns</span>
-    <h2>The longer you use it,<br>the wider the moat.</h2>
-    <div class="stats-row">
-      <div class="stat">
-        <div class="stat-num">15<span>K+</span></div>
-        <div class="stat-lbl">Decisions captured</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">3<span>K+</span></div>
-        <div class="stat-lbl">Terms governed</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">500<span>+</span></div>
-        <div class="stat-lbl">Models onboarded</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">40<span>%</span></div>
-        <div class="stat-lbl">Less re-explaining</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CTA -->
-  <div class="cta-band">
-    <h2>Ready to give your AI agents real context?</h2>
-    <p>One platform. Every definition. Total trust.</p>
-    <div class="cta-btns">
-      <button class="btn-dark" onclick="go('contact')">Get in Touch</button>
-      <button class="btn-outline" onclick="go('about')">About Us</button>
-    </div>
-  </div>
-
-</div>
-
-<!-- ══════════════════════════════════════
      ABOUT PAGE
 ══════════════════════════════════════ -->
-<div class="page" id="pg-about">
+<div class="page active" id="pg-discover">
 
   <!-- Hero -->
-  <div class="about-hero">
-    <div class="hero-eyebrow">About Splinth AI</div>
-    <h1>Your data knows more than<br>it's been allowed to <em>say.</em></h1>
-    <p class="hero-lead">We build tools that help businesses of every size stop staring at numbers and start understanding what they mean. No jargon. No data team required. Just clear answers and confident next steps.</p>
+  <div class="discover-hero">
+    <div class="hero-eyebrow">Splinth AI</div>
+    <h1>From <em>'What happened?'</em><br>to <em>'Here's what to fix'</em><br>in one step.</h1>
+    <p class="hero-lead">No technical know-how needed. No experts required.</p>
+    <button class="btn-dark reveal" style="align-self:flex-start;animation:fadeUp 0.6s 0.3s ease both;" onclick="go('contact')">Get in Touch</button>
   </div>
 
-  <hr class="divider">
+  <!-- Problem -->
+  <div class="d-problem reveal">
+    <span class="section-label">The problem</span>
+    <p class="big-line">Most businesses don't have an <em>information</em> problem. They have an <em>understanding</em> problem.</p>
+    <p>The answers are already there, buried in the tools you use every day. The frustrating part is not being able to reach them when it matters most.</p>
+  </div>
+
+  <!-- Vision -->
+  <div class="d-vision reveal">
+    <div class="inner">
+      <div class="d-vision-aside">
+        <span class="section-label">Our vision</span>
+        <p class="big-line">We believe no business should ever have to <em>guess</em> why something happened.</p>
+      </div>
+      <div class="d-vision-body">
+        <p>Splinth AI exists to give every business, regardless of size or resources, the kind of clarity that turns uncertainty into confidence and confusion into direction.</p>
+        <div class="pullquote">
+          <p>From what happened, here's what to fix. In one step.</p>
+        </div>
+        <p>That clarity shouldn't be something you have to chase, hire for, or wait on. Whatever the size of your business, the answers should always be within reach.</p>
+      </div>
+    </div>
+  </div>
 
   <!-- What we do -->
-  <div class="what-we-do">
+  <div class="d-what reveal">
+    <span class="section-label">What we do</span>
+    <p class="big-line">We connect the dots your business tools have been <em>drawing all along.</em></p>
+    <p class="intro">We bring together everything your systems already know, trace what's behind every outcome, and give you a straight answer: what happened, why it happened, and what to do next.</p>
+    <div class="d-pillars">
+      <div>
+        <div class="d-pillar-title">🔗 Connect</div>
+        <p class="d-pillar-body">We plug into the tools your business already uses and bring everything they know into one place. No disruption, no starting from scratch.</p>
+      </div>
+      <div>
+        <div class="d-pillar-title">💬 Ask</div>
+        <p class="d-pillar-body">Type your question the way you'd ask a colleague. Why did this happen? Where are we losing? What's slowing us down? Plain English, every time.</p>
+      </div>
+      <div>
+        <div class="d-pillar-title">💡 Know</div>
+        <p class="d-pillar-body">Get a straight answer: what happened, why it happened, and what to fix next. No chasing. No guesswork. Just clarity, in one step.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Difference -->
+  <div class="d-difference reveal">
     <div class="inner">
-      <span class="section-label">What we do</span>
-      <div class="pillars">
-        <div>
-          <div class="pillar-num">01</div>
-          <div class="pillar-title">We translate your data</div>
-          <p class="pillar-body">Your systems generate thousands of signals every day. We connect them, read them, and give you the plain-language story behind your numbers.</p>
+      <span class="section-label">The difference it makes</span>
+      <p class="big-line">From staring at numbers<br>to <em>understanding them.</em></p>
+      <p class="intro">Before Splinth AI, the answer lives in someone's head and walks out the door when they leave. After, every insight is captured, clear, and there when you need it.</p>
+      <div class="before-after">
+        <div class="ba-cell">
+          <div class="ba-label">Without Splinth AI</div>
+          <ul class="ba-list">
+            <li>Results change, but nobody knows why</li>
+            <li>Every team has a different version of the truth</li>
+            <li>Answers take days, sometimes weeks</li>
+            <li>Key knowledge leaves when people leave</li>
+            <li>AI gives confident answers nobody can verify</li>
+          </ul>
         </div>
-        <div>
-          <div class="pillar-num">02</div>
-          <div class="pillar-title">We surface the why</div>
-          <p class="pillar-body">Most tools show you what happened. We go further, finding the root cause hiding inside your processes, so you know exactly where to act.</p>
-        </div>
-        <div>
-          <div class="pillar-num">03</div>
-          <div class="pillar-title">We help you decide faster</div>
-          <p class="pillar-body">From "what happened?" to "here's what to fix" in one step. No diagnosis loops. No guesswork. Just a clear path forward for your business.</p>
+        <div class="ba-cell after">
+          <div class="ba-label">With Splinth AI</div>
+          <ul class="ba-list">
+            <li>Ask why and get a clear, ranked explanation instantly</li>
+            <li>One shared truth across every team and every tool</li>
+            <li>Answers in seconds, backed by real evidence</li>
+            <li>Knowledge is captured, searchable, and permanent</li>
+            <li>AI that shows its reasoning, every single time</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 
-  <hr class="divider">
-
-  <!-- Before / After -->
-  <section>
-    <span class="section-label">The difference it makes</span>
-    <h2>From staring at numbers<br>to <em>understanding them.</em></h2>
-    <div class="before-after">
-      <div class="ba-cell">
-        <div class="ba-label">Without Splinth AI</div>
-        <ul class="ba-list">
-          <li>Sales dropped, but nobody knows why</li>
-          <li>Three teams, three different versions of the truth</li>
-          <li>Answers take days, sometimes weeks</li>
-          <li>Key knowledge lives in one person's head</li>
-          <li>AI tools give confident answers nobody can verify</li>
-        </ul>
-      </div>
-      <div class="ba-cell after">
-        <div class="ba-label">With Splinth AI</div>
-        <ul class="ba-list">
-          <li>Ask why and get a clear, ranked explanation instantly</li>
-          <li>One shared definition of every metric, everywhere</li>
-          <li>Answers in seconds, backed by real evidence</li>
-          <li>Knowledge is captured, searchable, and permanent</li>
-          <li>AI that shows its reasoning, every single time</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <hr class="divider">
-
-  <!-- Story -->
-  <div class="story-section">
-    <div class="story-grid">
-      <div class="story-aside">
-        <h2>Built for the people who <em>run</em> things, not just the ones who read reports.</h2>
-      </div>
-      <div class="story-body">
-        <p>Big companies spend millions on data teams to figure out why sales dipped, why customers left, or where their operations are leaking money. Everyone else has been left to guess.</p>
-        <div class="pullquote">
-          <p>"Stop diagnosing. Start deciding."</p>
-        </div>
-        <p>We started Splinth AI because that gap shouldn't exist. Every business owner, whether they run a 5-person shop or a 500-person operation, deserves to understand what's really driving their results.</p>
-        <p>Our products are built around one idea: context is everything. Raw data without context is noise. With context, it becomes a map that shows you where you are, what's slowing you down, and what to do next.</p>
-      </div>
-    </div>
+  <!-- Quote band -->
+  <div class="d-quote-band reveal">
+    <blockquote>"Stop diagnosing.<br>Start deciding."</blockquote>
+    <cite>Splinth AI</cite>
   </div>
 
-  <!-- CTA -->
-  <div style="background: var(--paper2); border-top: 0.5px solid var(--rule);">
-    <div class="closing">
-      <h2>Want to know more?</h2>
-      <p>We'd love to tell you what Splinth AI can do for your business.</p>
-      <button class="btn-dark" onclick="go('contact')">Get in Touch</button>
-    </div>
+  <!-- Closing CTA -->
+  <div class="d-closing reveal">
+    <h2>Ready to hear what your business has been trying to <em>tell you?</em></h2>
+    <p>No setup. No technical know-how. No experts required. Just a real conversation.</p>
   </div>
 
 </div>
@@ -1337,7 +1419,7 @@ footer {
       <div class="contact-faq">
         <div class="faq-item">
           <h3>Not sure where to start?</h3>
-          <p>That's completely fine. Tell us what's frustrating you about your data right now and we'll point you in the right direction. No pitch, no pressure.</p>
+          <p>That's completely fine. Tell us what questions you can't seem to get a straight answer to and we'll point you in the right direction. No pitch, no pressure.</p>
         </div>
         <div class="faq-item">
           <h3>Have a question about the products?</h3>
@@ -1359,7 +1441,7 @@ footer {
      FOOTER
 ══════════════════════════════════════ -->
 <footer>
-  <span class="footer-logo" onclick="go('home')">splinth<span>ai</span>.com</span>
+  <span class="footer-logo" onclick="go('discover')">splinth<span>ai</span>.com</span>
   <div class="footer-tagline">Stop diagnosing. Start deciding.</div>
   <div class="footer-copy">© 2026 Splinth AI. All rights reserved.</div>
 </footer>
@@ -1378,7 +1460,7 @@ try { sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }
 catch (e) { console.warn('Supabase not configured:', e.message); }
 
 let currentTag = 'general';
-const PAGES = ['home', 'about', 'how', 'products', 'contact'];
+const PAGES = ['discover', 'how', 'products', 'contact'];
 
 /* ── Autocomplete ── */
 function getSavedNames() {
@@ -1448,8 +1530,8 @@ async function delIdea(id) {
 function go(pg) { window.location.hash = pg; }
 
 function handleHash() {
-  var hash = window.location.hash.slice(1) || 'home';
-  if (!PAGES.includes(hash)) hash = 'home';
+  var hash = window.location.hash.slice(1) || 'discover';
+  if (!PAGES.includes(hash)) hash = 'discover';
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
   document.getElementById('pg-' + hash).classList.add('active');
